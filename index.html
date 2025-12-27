@@ -6,29 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#09090b">
 
-    <title>DevTools Pro - Ultimate Editor</title>
+    <title>Code Formats - Online JSON Formatter, HTML, CSS, JS Tools</title>
     <meta name="description"
-        content="Free Developer Tools: JSON Formatter, HTML Minifier, JS Beautifier. Secure & Client-side.">
+        content="Code Formats is a free, secure, client-side developer toolkit. Format JSON, Minify CSS/JS, Convert Excel to HTML, Generate QR Codes, and more instantly.">
+    <meta name="keywords"
+        content="Code Formats, JSON Formatter, HTML Minifier, CSS Beautifier, SQL Formatter, Base64 Encoder, Online Code Tools, Developer Utilities">
+    <meta name="author" content="Code Formats">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://codeformats.com/">
+    <meta property="og:title" content="Code Formats - All-in-One Developer Tools">
+    <meta property="og:description"
+        content="Format, Minify, and Convert code instantly. Secure client-side tools for developers.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Code+Formats">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://codeformats.com/">
+    <meta property="twitter:title" content="Code Formats - All-in-One Developer Tools">
+    <meta property="twitter:description"
+        content="Format, Minify, and Convert code instantly. Secure client-side tools for developers.">
+    <meta property="twitter:image" content="https://via.placeholder.com/1200x630.png?text=Code+Formats">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <script src="https://unpkg.com/prettier@3.0.3/standalone.js"></script>
-    <script src="https://unpkg.com/prettier@3.0.3/plugins/babel.js"></script>
-    <script src="https://unpkg.com/prettier@3.0.3/plugins/estree.js"></script>
-    <script src="https://unpkg.com/prettier@3.0.3/plugins/html.js"></script>
-    <script src="https://unpkg.com/prettier@3.0.3/plugins/postcss.js"></script>
-    <script src="https://unpkg.com/prettier@3.0.3/plugins/yaml.js"></script>
-    <script src="https://unpkg.com/prettier@3.0.3/plugins/typescript.js"></script>
+    <script src="https://unpkg.com/prettier@3.0.3/standalone.js" defer></script>
+    <script src="https://unpkg.com/prettier@3.0.3/plugins/babel.js" defer></script>
+    <script src="https://unpkg.com/prettier@3.0.3/plugins/estree.js" defer></script>
+    <script src="https://unpkg.com/prettier@3.0.3/plugins/html.js" defer></script>
+    <script src="https://unpkg.com/prettier@3.0.3/plugins/postcss.js" defer></script>
+    <script src="https://unpkg.com/prettier@3.0.3/plugins/yaml.js" defer></script>
+    <script src="https://unpkg.com/prettier@3.0.3/plugins/typescript.js" defer></script>
 
-    <script src="https://unpkg.com/sql-formatter@12.2.0/dist/sql-formatter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://unpkg.com/sql-formatter@12.2.0/dist/sql-formatter.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" defer></script>
 
     <style>
         :root {
@@ -143,7 +164,7 @@
         .nav-group-title {
             padding: 12px 20px 8px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
             color: var(--text-muted);
             letter-spacing: 0.5px;
@@ -526,8 +547,6 @@
             .footer-links {
                 display: none;
             }
-
-            /* Hide extra links on mobile */
         }
 
         .toast {
@@ -569,14 +588,14 @@
 
     <aside id="sidebar">
         <div class="brand">
-            <i class="fas fa-code-branch"></i> DevTools Pro
+            <i class="fas fa-layer-group"></i> Code Formats
         </div>
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Search tools..." onkeyup="filterTools(this)">
         </div>
         <div class="menu" id="menuContainer"></div>
-        <!-- 
-        <div class="sidebar-ad">
+
+        <!-- <div class="sidebar-ad">
             <i class="fas fa-ad" style="margin-right:8px"></i> Ad Space (300x250)
         </div> -->
     </aside>
@@ -665,10 +684,15 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span>Action Completed</span></div>
 
     <script>
-        // --- 1. CONFIGURATION (Updated Order & HTML Tools) ---
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+        });
+
+        // --- 1. CONFIGURATION ---
         const tools = [
             {
-                category: "JSON Tools", // 1st
+                category: "JSON Tools",
                 items: [
                     { id: "json-fmt", icon: "fas fa-code", name: "JSON Formatter", desc: "Validate, Prettify & Tree View" },
                     { id: "json-min", icon: "fas fa-compress", name: "JSON Minifier", desc: "Compress JSON data" },
@@ -678,7 +702,7 @@
                 ]
             },
             {
-                category: "HTML Tools", // 2nd (Added as requested)
+                category: "HTML Tools",
                 items: [
                     { id: "html-fmt", icon: "fab fa-html5", name: "HTML Formatter", desc: "Beautify HTML code" },
                     { id: "html-min", icon: "fas fa-compress-arrows-alt", name: "HTML Minifier", desc: "Compress HTML code" },
@@ -777,7 +801,8 @@
             currentId = id;
 
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.nav-item[data-id="${id}"]`).classList.add('active');
+            const activeItem = document.querySelector(`.nav-item[data-id="${id}"]`);
+            if (activeItem) activeItem.classList.add('active');
 
             let tool;
             tools.forEach(g => { const t = g.items.find(i => i.id === id); if (t) tool = t; });
@@ -809,7 +834,7 @@
                 els.btnSec.style.display = 'none';
             }
             if (id === 'html-view' || id === 'excel-html') {
-                els.input.placeholder = id === 'excel-html' ? "Paste Excel cells..." : "Paste HTML code...";
+                els.input.placeholder = id === 'excel-html' ? "Paste Excel cells (Tab separated)..." : "Paste HTML code...";
                 els.btnSec.style.display = 'none';
                 els.btnPri.innerHTML = '<i class="fas fa-eye"></i> Preview';
             }
@@ -845,11 +870,10 @@
                 else if (currentId === 'json-yaml') res = jsyaml.dump(JSON.parse(val));
                 else if (currentId === 'json-xml') res = json2xml(JSON.parse(val));
 
-                // --- HTML TOOLS (Added) ---
+                // --- HTML TOOLS ---
                 else if (currentId === 'html-fmt') res = await prettier.format(val, { parser: "html", plugins: getPlugins() });
                 else if (currentId === 'html-min') res = val.replace(/\n/g, "").replace(/[\t ]+\</g, "<").replace(/\>[\t ]+\</g, "><").replace(/\>[\t ]+$/g, ">");
                 else if (currentId === 'html-view') {
-                    // Preview Mode
                     els.frame.style.display = 'block';
                     els.output.style.display = 'none';
                     els.frame.srcdoc = val;
@@ -862,7 +886,7 @@
                     els.frame.style.display = 'block';
                     els.output.style.display = 'none';
                     els.frame.srcdoc = res;
-                    els.output.value = res; // Also set code
+                    els.output.value = res;
                     btn.innerHTML = originalText;
                     return;
                 }
@@ -1019,7 +1043,7 @@
         function clearAll() { els.input.value = ""; els.output.value = ""; els.visual.innerHTML = ""; els.inputStats.innerText = "0 chars | 0 KB"; els.outputStats.style.display = 'none'; els.savingsStat.style.display = 'none'; }
         function downloadOutput() {
             const blob = new Blob([els.output.value], { type: "text/plain" });
-            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `devtools_${Date.now()}.txt`; a.click();
+            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `codeformats_export_${Date.now()}.txt`; a.click();
         }
         function toggleFullscreen() { els.output.parentElement.parentElement.classList.toggle('fullscreen'); }
         function showToast(msg, isError = false) {
@@ -1038,8 +1062,6 @@
             return formatted.substring(1, formatted.length - 3);
         }
         function json2xml(obj) { return '<root>' + Object.entries(obj).map(([k, v]) => `<${k}>${v}</${k}>`).join('') + '</root>'; }
-
-        init();
     </script>
 </body>
 
