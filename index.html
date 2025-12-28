@@ -3,10 +3,11 @@
 
 <head>
     <meta name="google-site-verification" content="GtqqG0buC54bb3Z8amYt74k_CPQSbTXAT1pk9M_pPt4" />
-<meta property="og:type" content="website">
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://code-formats.vercel.app/">
     <meta property="og:title" content="Code Formats - Ultimate Developer Toolkit">
-    <meta property="og:description" content="Free Developer Tools: JSON Formatter, Image Optimizer, Smooth Shadows, Mock Data, Social Previews & More.">
+    <meta property="og:description"
+        content="Free Developer Tools: JSON Formatter, Image Optimizer, Smooth Shadows, Mock Data, Social Previews & More.">
     <meta property="og:image" content="https://code-formats.vercel.app/codeformat.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://code-formats.vercel.app/codeformat.png">
@@ -689,8 +690,16 @@
             .footer-links {
                 justify-content: center;
                 width: 100%;
-                /* padding-top: 10px; */
+                padding-top: 10px;
+
+            }
+
+            .footer-stats {
                 border-top: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .footer-stats .stat-item:first-child {
+                padding-top: 10px;
             }
 
             header {
@@ -854,7 +863,8 @@
                 <div class="stat-item" id="footerStatus"><i class="fas fa-circle-notch"></i> Ready</div>
                 <div class="stat-item" id="savingsStat" style="display:none;"><i class="fas fa-arrow-down"></i> <span
                         id="savingsText"></span> <span class="diff-tag" id="savingsBadge"></span></div>
-                <div class="footer-links"><a href="About.html">About</a> • <a href="Privacy.html">Privacy</a> • <a href="Contact.html">Contact</a>
+                <div class="footer-links"><a href="About.html">About</a> • <a href="Privacy.html">Privacy</a> • <a
+                        href="Contact.html">Contact</a>
                 </div>
             </div>
             <div class="footer-actions"><button class="btn btn-sec" id="btnSecondary"
