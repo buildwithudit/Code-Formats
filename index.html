@@ -567,6 +567,7 @@
             font-size: 0.8rem;
             font-family: var(--font-code);
             color: var(--text-muted);
+            white-space: nowrap;
         }
 
         .footer-actions {
@@ -682,12 +683,13 @@
             .btn {
                 flex: 1;
                 justify-content: center;
+                white-space: nowrap;
             }
 
             .footer-links {
                 justify-content: center;
                 width: 100%;
-                padding-top: 10px;
+                /* padding-top: 10px; */
                 border-top: 1px solid rgba(255, 255, 255, 0.05);
             }
 
@@ -750,7 +752,7 @@
                     <p id="toolDesc">Validate, Prettify and Minify JSON data</p>
                 </div>
             </div>
-            <div class="header-right"><a href="#" class="nav-link">Blog</a><button class="theme-btn"
+            <div class="header-right"><a href="blog.html" class="nav-link">Blog</a><button class="theme-btn"
                     onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button></div>
         </header>
 
@@ -852,7 +854,7 @@
                 <div class="stat-item" id="footerStatus"><i class="fas fa-circle-notch"></i> Ready</div>
                 <div class="stat-item" id="savingsStat" style="display:none;"><i class="fas fa-arrow-down"></i> <span
                         id="savingsText"></span> <span class="diff-tag" id="savingsBadge"></span></div>
-                <div class="footer-links"><a href="#">About</a> • <a href="#">Privacy</a> • <a href="#">Contact</a>
+                <div class="footer-links"><a href="About.html">About</a> • <a href="Privacy.html">Privacy</a> • <a href="Contact.html">Contact</a>
                 </div>
             </div>
             <div class="footer-actions"><button class="btn btn-sec" id="btnSecondary"
