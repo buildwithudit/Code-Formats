@@ -612,29 +612,60 @@
                 transform: translateX(0);
             }
 
+            /* --- FOOTER UX FIX START --- */
             .footer {
-                padding: 10px 15px;
+                padding: 15px;
                 height: auto;
                 flex-direction: column-reverse;
-                gap: 10px;
+                /* Buttons upar, Links neeche */
+                gap: 15px;
             }
 
             .footer-actions {
                 width: 100%;
+                display: flex;
+                gap: 10px;
             }
 
             .btn {
                 flex: 1;
                 justify-content: center;
+                height: 45px;
+                /* Mobile pe button thode bade acche lagte hain */
             }
 
+            .footer-stats {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                /* Status aur Links ko upar-neeche karo */
+                align-items: center;
+                gap: 10px;
+            }
+
+            .stat-item {
+                font-size: 0.75rem;
+                opacity: 0.8;
+            }
+
+            /* Links ko wapas dikhana aur style karna */
             .footer-links {
-                display: none;
+                display: flex;
+                gap: 20px;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                /* Halki line separation ke liye */
+                width: 100%;
+                justify-content: center;
             }
 
             header {
                 padding: 0 15px;
             }
+
+            /* --- FOOTER UX FIX END --- */
         }
 
         .toast {
