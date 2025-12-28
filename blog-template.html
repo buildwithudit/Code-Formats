@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Title Here | Code Formats Blog</title>
+    <meta name="description" content="Description of the article goes here for SEO.">
+    <meta name="author" content="Udit Sharma">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        /* CORE VARIABLES (SAME AS YOUR SITE) */
+        :root {
+            --bg-body: #050505;
+            --bg-glass: rgba(20, 20, 23, 0.6);
+            --border: #27272a;
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --text-main: #fff;
+            --text-muted: #a1a1aa;
+        }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.1), transparent 40%);
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* NAV */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 40px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-back:hover {
+            color: #fff;
+            transform: translateX(-5px);
+        }
+
+        /* ARTICLE TYPOGRAPHY */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta {
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #d4d4d8;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            color: #d4d4d8;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* CTA BOX (PAISA KAMAO) */
+        .cta-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px dashed var(--primary);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-btn {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+
+        <article>
+            <h1>Article Headline Goes Here</h1>
+            <span class="meta">By Udit Sharma • 5 Min Read</span>
+
+            <p>First paragraph intro...</p>
+
+            <h2>Subheading 1</h2>
+            <p>Content goes here...</p>
+
+            <div class="cta-box">
+                <h3>Want to code faster?</h3>
+                <p>Use our privacy-focused tools to format and minify your code instantly.</p>
+                <a href="index.html" class="cta-btn">Try Free Tools</a>
+            </div>
+
+            <h2>Subheading 2</h2>
+            <p>More content...</p>
+
+        </article>
+
+        <footer>&copy; 2025 Code Formats by Udit Sharma.</footer>
+    </div>
+
+</body>
+
+</html>

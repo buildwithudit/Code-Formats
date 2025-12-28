@@ -3,38 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#09090b">
 
-    <title>Code Formats - Online JSON Formatter, HTML, CSS, JS Tools</title>
-    <meta name="description"
-        content="Code Formats is a free, secure, client-side developer toolkit. Format JSON, Minify CSS/JS, Convert Excel to HTML, Generate QR Codes, and more instantly.">
-    <meta name="keywords"
-        content="Code Formats, JSON Formatter, HTML Minifier, CSS Beautifier, SQL Formatter, Base64 Encoder, Online Code Tools, Developer Utilities">
-    <meta name="author" content="Code Formats">
-    <meta name="robots" content="index, follow">
+    <title>Code Formats - Free Developer Tools</title>
+    <meta name="description" content="Format JSON, Prettify HTML/CSS/JS, Minify code.">
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://codeformats.com/">
-    <meta property="og:title" content="Code Formats - All-in-One Developer Tools">
-    <meta property="og:description"
-        content="Format, Minify, and Convert code instantly. Secure client-side tools for developers.">
-    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Code+Formats">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://codeformats.com/">
-    <meta property="twitter:title" content="Code Formats - All-in-One Developer Tools">
-    <meta property="twitter:description"
-        content="Format, Minify, and Convert code instantly. Secure client-side tools for developers.">
-    <meta property="twitter:image" content="https://via.placeholder.com/1200x630.png?text=Code+Formats">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://unpkg.com">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <script src="https://unpkg.com/prettier@3.0.3/standalone.js" defer></script>
@@ -44,7 +25,6 @@
     <script src="https://unpkg.com/prettier@3.0.3/plugins/postcss.js" defer></script>
     <script src="https://unpkg.com/prettier@3.0.3/plugins/yaml.js" defer></script>
     <script src="https://unpkg.com/prettier@3.0.3/plugins/typescript.js" defer></script>
-
     <script src="https://unpkg.com/sql-formatter@12.2.0/dist/sql-formatter.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" defer></script>
@@ -65,23 +45,22 @@
             --text-muted: #a1a1aa;
             --success: #10b981;
             --error: #ef4444;
-            --ad-bg: #1e1e22;
             --font-ui: 'Inter', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
             --sidebar-w: 260px;
+            --header-h: 60px;
         }
 
         html.light {
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
             --bg-sidebar: #ffffff;
             --bg-pane: #ffffff;
-            --bg-input: #f8fafc;
+            --bg-input: #f1f5f9;
             --border: #e2e8f0;
             --primary: #4f46e5;
             --primary-glow: rgba(79, 70, 229, 0.15);
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --ad-bg: #e2e8f0;
         }
 
         * {
@@ -89,6 +68,7 @@
             padding: 0;
             box-sizing: border-box;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -99,9 +79,29 @@
             display: flex;
             overflow: hidden;
             font-size: 14px;
+            transition: background 0.3s, color 0.3s;
         }
 
-        /* --- SIDEBAR --- */
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Sidebar */
         aside {
             width: var(--sidebar-w);
             background: var(--bg-sidebar);
@@ -109,11 +109,19 @@
             display: flex;
             flex-direction: column;
             z-index: 50;
-            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        aside.collapsed {
+            width: 0;
+            border-right: none;
         }
 
         .brand {
-            height: 60px;
+            height: var(--header-h);
             display: flex;
             align-items: center;
             padding: 0 20px;
@@ -121,6 +129,11 @@
             font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-main);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
 
@@ -136,10 +149,11 @@
             width: 100%;
             background: var(--bg-input);
             border: 1px solid var(--border);
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 6px;
             color: var(--text-main);
             font-size: 0.85rem;
+            transition: border-color 0.2s;
         }
 
         .search-input:focus {
@@ -152,17 +166,8 @@
             padding-bottom: 20px;
         }
 
-        .menu::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .menu::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
         .nav-group-title {
-            padding: 12px 20px 8px;
+            padding: 15px 20px 8px;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -171,7 +176,7 @@
         }
 
         .nav-item {
-            padding: 8px 20px;
+            padding: 10px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -198,38 +203,24 @@
             text-align: center;
         }
 
-        /* Sidebar Ad Spot */
-        .sidebar-ad {
-            margin: 10px 20px 20px;
-            height: 200px;
-            background: var(--ad-bg);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            border: 1px dashed var(--border);
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* --- MAIN CONTENT --- */
+        /* Main */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             min-width: 0;
+            position: relative;
         }
 
         header {
-            height: 60px;
+            height: var(--header-h);
             border-bottom: 1px solid var(--border);
             background: var(--bg-sidebar);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
+            z-index: 40;
         }
 
         .header-left {
@@ -238,15 +229,25 @@
             gap: 15px;
         }
 
-        .mobile-menu-btn {
-            display: none;
+        .menu-toggle-btn {
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            padding: 8px;
+            transition: 0.2s;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .menu-toggle-btn:hover {
+            color: var(--primary);
+            background: rgba(125, 125, 125, 0.1);
         }
 
         .tool-info h1 {
             font-size: 1.1rem;
             font-weight: 600;
+            margin-bottom: 2px;
         }
 
         .tool-info p {
@@ -272,6 +273,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
+            transition: 0.2s;
         }
 
         .nav-link:hover {
@@ -288,9 +290,14 @@
             cursor: pointer;
             display: grid;
             place-items: center;
+            transition: 0.2s;
         }
 
-        /* --- WORKSPACE --- */
+        .theme-btn:hover {
+            border-color: var(--text-muted);
+        }
+
+        /* Workspace */
         .workspace {
             flex: 1;
             padding: 15px;
@@ -299,6 +306,7 @@
             gap: 15px;
             overflow: hidden;
             background: var(--bg-body);
+            position: relative;
         }
 
         .pane {
@@ -309,11 +317,21 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .pane.fullscreen {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            border-radius: 0;
+            border: none;
         }
 
         .pane-header {
-            padding: 8px 15px;
-            background: rgba(0, 0, 0, 0.03);
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.02);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -322,25 +340,28 @@
 
         .pane-title {
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: var(--text-muted);
+            letter-spacing: 0.5px;
         }
 
         .pane-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            align-items: center;
         }
 
         .action-icon {
             cursor: pointer;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: 0.2s;
         }
 
         .action-icon:hover {
             color: var(--primary);
+            transform: translateY(-1px);
         }
 
         .editor-container {
@@ -361,6 +382,27 @@
             resize: none;
         }
 
+        /* TYPING ANIMATION CSS */
+        /* Only creates the blink effect for the caret */
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--primary)
+            }
+        }
+
+        /* Apply this class via JS when typing */
+        .typing-effect {
+            border-right: 2px solid var(--primary);
+            /* The cursor */
+            animation: blink-caret 0.75s step-end infinite;
+        }
+
         .editor-stats {
             position: absolute;
             bottom: 0;
@@ -368,7 +410,7 @@
             background: var(--bg-sidebar);
             border-top-left-radius: 6px;
             padding: 4px 10px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             border-top: 1px solid var(--border);
             border-left: 1px solid var(--border);
@@ -383,6 +425,13 @@
             display: none;
             overflow: auto;
             padding: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
         }
 
         /* Syntax Highlighting */
@@ -411,35 +460,21 @@
             color: #0451a5;
         }
 
-        /* --- AD BANNER (Bottom) --- */
-        .ad-banner {
-            height: 80px;
-            background: var(--ad-bg);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* --- FOOTER --- */
+        /* Footer */
         .footer {
-            height: 50px;
+            height: 60px;
             background: var(--bg-sidebar);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
+            border-top: 1px solid var(--border);
         }
 
         .footer-stats {
             display: flex;
             gap: 15px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-family: var(--font-code);
             color: var(--text-muted);
         }
@@ -455,8 +490,8 @@
             color: #10b981;
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 0.75rem;
             font-weight: bold;
+            font-size: 0.75rem;
             display: none;
         }
 
@@ -465,17 +500,29 @@
             gap: 10px;
         }
 
+        /* --- CHANGED BUTTON STYLES --- */
         .btn {
-            padding: 8px 16px;
+            padding: 10px 24px;
+            /* Slightly wider */
             border-radius: 6px;
-            font-weight: 600;
+            font-weight: 700;
+            /* Bolder */
             font-size: 0.85rem;
             cursor: pointer;
             border: 1px solid transparent;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: 0.2s;
+            transition: all 0.2s;
+            user-select: none;
+
+            /* NEW FONT SETTINGS */
+            font-family: var(--font-code);
+            /* JetBrains Mono */
+            text-transform: uppercase;
+            /* All Caps */
+            letter-spacing: 0.5px;
+            /* Spacing */
         }
 
         .btn-sec {
@@ -486,15 +533,18 @@
 
         .btn-sec:hover {
             border-color: var(--text-muted);
+            background: rgba(125, 125, 125, 0.05);
         }
 
         .btn-pri {
             background: var(--primary);
             color: #fff;
+            box-shadow: 0 4px 12px var(--primary-glow);
         }
 
         .btn-pri:hover {
             background: var(--primary-hover);
+            transform: translateY(-1px);
         }
 
         .footer-links {
@@ -507,63 +557,92 @@
         .footer-links a {
             color: var(--text-muted);
             text-decoration: none;
+            transition: 0.2s;
         }
 
         .footer-links a:hover {
             color: var(--primary);
         }
 
-        /* --- RESPONSIVE --- */
+        /* Mobile */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 45;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         @media (max-width: 900px) {
             .workspace {
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr 1fr;
+                padding: 10px;
+                gap: 10px;
             }
 
             aside {
                 position: fixed;
-                left: -100%;
-                height: 100%;
-                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                width: 280px;
+                box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
             }
 
             aside.open {
-                left: 0;
+                transform: translateX(0);
             }
 
-            .mobile-menu-btn {
-                display: block;
+            .footer {
+                padding: 10px 15px;
+                height: auto;
+                flex-direction: column-reverse;
+                gap: 10px;
             }
 
-            .pane {
-                height: 100%;
+            .footer-actions {
+                width: 100%;
             }
 
-            .ad-banner {
-                height: 60px;
-                font-size: 0.7rem;
+            .btn {
+                flex: 1;
+                justify-content: center;
             }
 
             .footer-links {
                 display: none;
             }
+
+            header {
+                padding: 0 15px;
+            }
         }
 
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--bg-sidebar);
-            border: 1px solid var(--border);
+            bottom: 30px;
+            right: 30px;
+            background: var(--bg-pane);
+            border: 1px solid var(--primary);
             color: var(--text-main);
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
             font-weight: 500;
             transform: translateY(100px);
             opacity: 0;
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 2000;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -575,7 +654,11 @@
         }
 
         .toast i {
-            color: var(--success);
+            color: var(--primary);
+        }
+
+        .toast.error {
+            border-color: var(--error);
         }
 
         .toast.error i {
@@ -588,33 +671,31 @@
 
     <aside id="sidebar">
         <div class="brand">
-            <i class="fas fa-layer-group"></i> Code Formats
+            <div class="brand-logo">
+                <i class="fas fa-layer-group"></i> Code Formats
+            </div>
         </div>
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Search tools..." onkeyup="filterTools(this)">
         </div>
         <div class="menu" id="menuContainer"></div>
-
-        <!-- <div class="sidebar-ad">
-            <i class="fas fa-ad" style="margin-right:8px"></i> Ad Space (300x250)
-        </div> -->
     </aside>
 
-    <div id="overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:40;display:none;"
-        onclick="toggleSidebar()"></div>
+    <div id="overlay" onclick="toggleMobileSidebar()"></div>
 
     <main>
         <header>
             <div class="header-left">
-                <i class="fas fa-bars mobile-menu-btn" onclick="toggleSidebar()"></i>
+                <i class="fas fa-bars menu-toggle-btn" onclick="handleMenuClick()"></i>
                 <div class="tool-info">
                     <h1 id="toolTitle">JSON Formatter</h1>
                     <p id="toolDesc">Validate, Prettify and Minify JSON data</p>
                 </div>
             </div>
             <div class="header-right">
-                <a href="#" class="nav-link">Blog</a>
-                <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <button class="theme-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"
+                        id="themeIcon"></i></button>
             </div>
         </header>
 
@@ -628,7 +709,7 @@
                     </div>
                 </div>
                 <div class="editor-container">
-                    <textarea id="input" placeholder="Paste your code or text here..."></textarea>
+                    <textarea id="input" placeholder=""></textarea>
                     <div class="editor-stats" id="inputStats">0 chars | 0 KB</div>
                 </div>
             </div>
@@ -637,10 +718,11 @@
                 <div class="pane-header">
                     <span class="pane-title">Output</span>
                     <div class="pane-actions">
-                        <div id="viewToggles" style="display:none; gap:8px; margin-right:10px; font-size:0.8rem;">
+                        <div id="viewToggles"
+                            style="display:none; gap:10px; margin-right:10px; font-size:0.8rem; align-items:center;">
                             <span style="cursor:pointer; opacity:0.6" onclick="switchView('code')"
                                 id="toggleCode">Code</span>
-                            <span style="color:var(--border)">|</span>
+                            <span style="width:1px; height:12px; background:var(--border)"></span>
                             <span style="cursor:pointer; font-weight:bold; color:var(--primary)"
                                 onclick="switchView('visual')" id="toggleVisual">Visual</span>
                         </div>
@@ -652,15 +734,11 @@
                 <div class="editor-container">
                     <textarea id="output" readonly placeholder="Result will appear here..."></textarea>
                     <div id="visualOutput"></div>
-                    <iframe id="iframePreview"></iframe>
+                    <iframe id="iframePreview" sandbox="allow-scripts"></iframe>
                     <div class="editor-stats" id="outputStats" style="display:none;">0 KB</div>
                 </div>
             </div>
         </div>
-
-        <!-- <div class="ad-banner">
-            <i class="fas fa-ad" style="margin-right:10px"></i> Responsive Ad Banner (Leaderboard)
-        </div> -->
 
         <div class="footer">
             <div class="footer-stats">
@@ -670,13 +748,13 @@
                     <span class="diff-tag" id="savingsBadge"></span>
                 </div>
                 <div class="footer-links">
-                    <a href="#">About</a> • <a href="#">Privacy</a> • <a href="#">Contact</a>
+                    <a href="About.html">About</a> • <a href="Privacy.html">Privacy</a> • <a href="Contact.html">Contact</a>
                 </div>
             </div>
             <div class="footer-actions">
-                <button class="btn btn-sec" id="btnSecondary" onclick="runAction('secondary')">Minify</button>
+                <button class="btn btn-sec" id="btnSecondary" onclick="runAction('secondary')">MINIFY</button>
                 <button class="btn btn-pri" id="btnPrimary" onclick="runAction('primary')"><i class="fas fa-play"></i>
-                    Format / Run</button>
+                    RUN</button>
             </div>
         </div>
     </main>
@@ -684,94 +762,59 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span>Action Completed</span></div>
 
     <script>
-        // Wait for DOM to be ready
-        document.addEventListener('DOMContentLoaded', () => {
-            init();
-        });
-
-        // --- 1. CONFIGURATION ---
+        // --- 1. INITIALIZATION & STATE ---
         const tools = [
-            {
-                category: "JSON Tools",
-                items: [
-                    { id: "json-fmt", icon: "fas fa-code", name: "JSON Formatter", desc: "Validate, Prettify & Tree View" },
-                    { id: "json-min", icon: "fas fa-compress", name: "JSON Minifier", desc: "Compress JSON data" },
-                    { id: "json-csv", icon: "fas fa-table", name: "JSON to CSV", desc: "Convert JSON array to CSV" },
-                    { id: "json-yaml", icon: "fas fa-list-ul", name: "JSON to YAML", desc: "Convert to YAML format" },
-                    { id: "json-xml", icon: "fas fa-file-code", name: "JSON to XML", desc: "Convert to XML format" }
-                ]
-            },
-            {
-                category: "HTML Tools",
-                items: [
-                    { id: "html-fmt", icon: "fab fa-html5", name: "HTML Formatter", desc: "Beautify HTML code" },
-                    { id: "html-min", icon: "fas fa-compress-arrows-alt", name: "HTML Minifier", desc: "Compress HTML code" },
-                    { id: "html-view", icon: "fas fa-eye", name: "HTML Viewer", desc: "Preview HTML output" },
-                    { id: "excel-html", icon: "fas fa-table", name: "Excel to HTML", desc: "Convert Spreadsheet to HTML" }
-                ]
-            },
-            {
-                category: "JavaScript / React",
-                items: [
-                    { id: "js-fmt", icon: "fab fa-js", name: "JS Formatter", desc: "Beautify JavaScript/Node.js" },
-                    { id: "react-fmt", icon: "fab fa-react", name: "React Formatter", desc: "Format JSX and React Hooks" },
-                    { id: "ts-fmt", icon: "fab fa-js-square", name: "TS Formatter", desc: "Format TypeScript code" },
-                    { id: "js-min", icon: "fas fa-file-archive", name: "JS Minifier", desc: "Minify & Obfuscate JS" }
-                ]
-            },
-            {
-                category: "CSS / SCSS",
-                items: [
-                    { id: "css-fmt", icon: "fab fa-css3-alt", name: "CSS Formatter", desc: "Beautify CSS Code" },
-                    { id: "css-min", icon: "fas fa-compress-arrows-alt", name: "CSS Minifier", desc: "Compress CSS files" },
-                    { id: "css-analyze", icon: "fas fa-search", name: "CSS Analyzer", desc: "Find Duplicate Selectors" },
-                    { id: "scss-fmt", icon: "fab fa-sass", name: "SCSS Formatter", desc: "Format SASS/SCSS" }
-                ]
-            },
-            {
-                category: "Converters & Data",
-                items: [
-                    { id: "sql-fmt", icon: "fas fa-database", name: "SQL Formatter", desc: "Format SQL Queries" },
-                    { id: "xml-fmt", icon: "fas fa-code", name: "XML Formatter", desc: "Beautify XML" },
-                    { id: "base64", icon: "fas fa-shield-alt", name: "Base64 Tool", desc: "Encode or Decode Base64" },
-                    { id: "url-enc", icon: "fas fa-link", name: "URL Encoder", desc: "Encode URL parameters" },
-                    { id: "csv-json", icon: "fas fa-file-csv", name: "CSV to JSON", desc: "Convert CSV to JSON" }
-                ]
-            },
-            {
-                category: "Generators",
-                items: [
-                    { id: "qr-gen", icon: "fas fa-qrcode", name: "QR Generator", desc: "Generate QR Codes" },
-                    { id: "hash-gen", icon: "fas fa-fingerprint", name: "Hash Generator", desc: "MD5, SHA1, SHA256" },
-                    { id: "lorem", icon: "fas fa-paragraph", name: "Lorem Ipsum", desc: "Generate Dummy Text" }
-                ]
-            }
+            { category: "JSON Tools", items: [{ id: "json-fmt", icon: "fas fa-code", name: "JSON Formatter", desc: "Validate, Prettify & Tree View" }, { id: "json-min", icon: "fas fa-compress", name: "JSON Minifier", desc: "Compress JSON data" }, { id: "json-csv", icon: "fas fa-table", name: "JSON to CSV", desc: "Convert JSON array to CSV" }, { id: "json-yaml", icon: "fas fa-list-ul", name: "JSON to YAML", desc: "Convert to YAML format" }, { id: "json-xml", icon: "fas fa-file-code", name: "JSON to XML", desc: "Convert to XML format" }] },
+            { category: "HTML / XML", items: [{ id: "html-fmt", icon: "fab fa-html5", name: "HTML Formatter", desc: "Beautify HTML code" }, { id: "html-min", icon: "fas fa-compress-arrows-alt", name: "HTML Minifier", desc: "Compress HTML code" }, { id: "html-view", icon: "fas fa-eye", name: "HTML Viewer", desc: "Preview HTML output" }, { id: "xml-fmt", icon: "fas fa-code", name: "XML Formatter", desc: "Beautify XML" }] },
+            { category: "JS / CSS", items: [{ id: "js-fmt", icon: "fab fa-js", name: "JS Formatter", desc: "Beautify JavaScript" }, { id: "js-min", icon: "fas fa-file-archive", name: "JS Minifier", desc: "Minify & Obfuscate JS" }, { id: "css-fmt", icon: "fab fa-css3-alt", name: "CSS Formatter", desc: "Beautify CSS Code" }, { id: "css-min", icon: "fas fa-compress-arrows-alt", name: "CSS Minifier", desc: "Compress CSS files" }] },
+            { category: "Converters", items: [{ id: "excel-html", icon: "fas fa-table", name: "Excel to HTML", desc: "Convert Spreadsheet to HTML" }, { id: "csv-json", icon: "fas fa-file-csv", name: "CSV to JSON", desc: "Convert CSV to JSON" }, { id: "sql-fmt", icon: "fas fa-database", name: "SQL Formatter", desc: "Format SQL Queries" }] },
+            { category: "Utils", items: [{ id: "base64", icon: "fas fa-shield-alt", name: "Base64 Tool", desc: "Encode or Decode Base64" }, { id: "url-enc", icon: "fas fa-link", name: "URL Encoder", desc: "Encode URL parameters" }, { id: "qr-gen", icon: "fas fa-qrcode", name: "QR Generator", desc: "Generate QR Codes" }, { id: "hash-gen", icon: "fas fa-fingerprint", name: "Hash Generator", desc: "MD5, SHA1, SHA256" }, { id: "lorem", icon: "fas fa-paragraph", name: "Lorem Ipsum", desc: "Generate Dummy Text" }] }
         ];
 
-        // Global State
         let currentId = "json-fmt";
         const els = {
-            input: document.getElementById('input'),
-            output: document.getElementById('output'),
-            menu: document.getElementById('menuContainer'),
-            title: document.getElementById('toolTitle'),
-            desc: document.getElementById('toolDesc'),
-            visual: document.getElementById('visualOutput'),
-            frame: document.getElementById('iframePreview'),
-            inputStats: document.getElementById('inputStats'),
-            outputStats: document.getElementById('outputStats'),
-            savingsStat: document.getElementById('savingsStat'),
-            btnPri: document.getElementById('btnPrimary'),
-            btnSec: document.getElementById('btnSecondary'),
-            viewToggles: document.getElementById('viewToggles')
+            input: document.getElementById('input'), output: document.getElementById('output'), menu: document.getElementById('menuContainer'),
+            title: document.getElementById('toolTitle'), desc: document.getElementById('toolDesc'), visual: document.getElementById('visualOutput'),
+            frame: document.getElementById('iframePreview'), inputStats: document.getElementById('inputStats'), outputStats: document.getElementById('outputStats'),
+            savingsStat: document.getElementById('savingsStat'), btnPri: document.getElementById('btnPrimary'), btnSec: document.getElementById('btnSecondary'),
+            viewToggles: document.getElementById('viewToggles'), sidebar: document.getElementById('sidebar'), overlay: document.getElementById('overlay')
         };
 
-        // --- 2. INITIALIZATION ---
-        function init() {
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
             renderSidebar();
             selectTool('json-fmt');
+            setupEventListeners();
+            startTypingAnimation(); // Start the typing effect
+        });
 
-            // Input Listener
+        // --- NEW: TYPEWRITER ANIMATION LOGIC ---
+        function startTypingAnimation() {
+            const textToType = "Paste your JSON, HTML, or CSS here...";
+            const inputEl = document.getElementById('input');
+            let index = 0;
+
+            // Clear initially
+            inputEl.placeholder = "";
+
+            function type() {
+                if (index < textToType.length) {
+                    inputEl.placeholder += textToType.charAt(index);
+                    index++;
+                    setTimeout(type, 50); // Speed of typing
+                }
+            }
+
+            // Start typing after a small delay
+            setTimeout(type, 500);
+
+            // Clear animation if user focuses
+            inputEl.addEventListener('focus', () => {
+                inputEl.placeholder = "Paste your code here...";
+            });
+        }
+
+        function setupEventListeners() {
             els.input.addEventListener('input', () => {
                 updateStats(els.input.value, 'input');
                 document.getElementById('footerStatus').innerHTML = '<i class="fas fa-keyboard"></i> Typing...';
@@ -780,69 +823,84 @@
             document.addEventListener('keydown', e => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runAction('primary');
             });
+
+            els.input.addEventListener('keydown', function (e) {
+                if (e.key == 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 1;
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 900) {
+                    els.overlay.classList.remove('show');
+                    els.sidebar.classList.remove('open');
+                }
+            });
         }
 
-        // --- 3. SIDEBAR LOGIC ---
+        // --- 2. THEME LOGIC ---
+        function loadTheme() {
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.documentElement.className = saved;
+            updateThemeIcon(saved);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.className;
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.className = newTheme;
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            document.getElementById('themeIcon').className = theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // --- 3. CORE LOGIC ---
         function renderSidebar() {
             els.menu.innerHTML = tools.map((group, idx) => `
-                <div class="nav-group">
-                    <div class="nav-group-title">${group.category}</div>
-                    ${group.items.map(item => `
-                        <div class="nav-item ${idx === 0 && item.id === 'json-fmt' ? 'active' : ''}" 
-                             onclick="selectTool('${item.id}')" data-id="${item.id}">
-                            <i class="${item.icon}"></i> ${item.name}
-                        </div>
-                    `).join('')}
-                </div>
-            `).join('');
+                <div class="nav-group"><div class="nav-group-title">${group.category}</div>
+                ${group.items.map(item => `<div class="nav-item ${idx === 0 && item.id === 'json-fmt' ? 'active' : ''}" onclick="selectTool('${item.id}')" data-id="${item.id}"><i class="${item.icon}"></i> ${item.name}</div>`).join('')}
+                </div>`).join('');
         }
 
         function selectTool(id) {
             currentId = id;
-
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const activeItem = document.querySelector(`.nav-item[data-id="${id}"]`);
             if (activeItem) activeItem.classList.add('active');
 
-            let tool;
-            tools.forEach(g => { const t = g.items.find(i => i.id === id); if (t) tool = t; });
-
+            let tool; tools.forEach(g => { const t = g.items.find(i => i.id === id); if (t) tool = t; });
             els.title.innerText = tool.name;
             els.desc.innerText = tool.desc;
 
-            // Reset
             els.input.value = ""; els.output.value = "";
-            els.visual.style.display = 'none';
-            els.frame.style.display = 'none';
-            els.output.style.display = 'block';
-            els.viewToggles.style.display = (id === 'json-fmt' || id === 'html-view') ? 'flex' : 'none';
-            els.outputStats.style.display = 'none';
-            els.savingsStat.style.display = 'none';
+            els.visual.style.display = 'none'; els.frame.style.display = 'none'; els.output.style.display = 'block';
+            els.viewToggles.style.display = (id === 'json-fmt' || id === 'html-view' || id === 'excel-html') ? 'flex' : 'none';
+            els.outputStats.style.display = 'none'; els.savingsStat.style.display = 'none';
             updateStats("", 'input');
 
-            // Button Config
-            els.btnSec.style.display = 'flex';
-            els.btnSec.innerText = 'Minify';
-            els.btnPri.innerHTML = '<i class="fas fa-play"></i> Format / Run';
+            // Force uppercase for buttons via JS just in case, though CSS handles it
+            els.btnSec.style.display = 'flex'; els.btnSec.innerText = 'MINIFY'; els.btnPri.innerHTML = '<i class="fas fa-play"></i> RUN / FORMAT';
 
-            // Custom Logic per Tool
-            if (['qr-gen', 'lorem', 'hash-gen', 'base64', 'url-enc', 'csv-json'].includes(id)) {
-                els.btnSec.style.display = 'none';
+            if (['qr-gen', 'lorem', 'hash-gen', 'base64', 'url-enc', 'csv-json'].includes(id)) els.btnSec.style.display = 'none';
+            if (id === 'css-analyze') { els.btnPri.innerHTML = '<i class="fas fa-search"></i> ANALYZE'; els.btnSec.style.display = 'none'; }
+            if (id === 'html-view') {
+                els.input.placeholder = ""; // Reset for animation or manual set
+                els.btnSec.style.display = 'none'; els.btnPri.innerHTML = '<i class="fas fa-eye"></i> PREVIEW';
             }
-            if (id === 'css-analyze') {
-                els.btnPri.innerHTML = '<i class="fas fa-search"></i> Analyze';
-                els.btnSec.style.display = 'none';
-            }
-            if (id === 'html-view' || id === 'excel-html') {
-                els.input.placeholder = id === 'excel-html' ? "Paste Excel cells (Tab separated)..." : "Paste HTML code...";
-                els.btnSec.style.display = 'none';
-                els.btnPri.innerHTML = '<i class="fas fa-eye"></i> Preview';
+            if (id === 'excel-html') {
+                els.btnSec.style.display = 'none'; els.btnPri.innerHTML = '<i class="fas fa-code"></i> CONVERT';
             }
 
-            if (window.innerWidth <= 900) toggleSidebar();
+            if (window.innerWidth <= 900) toggleMobileSidebar();
         }
 
-        // --- 4. CORE FUNCTIONALITY ---
         async function runAction(mode) {
             const val = els.input.value;
             const getPlugins = () => window.prettierPlugins || {};
@@ -853,215 +911,117 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
+            await new Promise(r => setTimeout(r, 50));
+
             try {
                 let res = "";
-
-                // --- JSON ---
-                if (currentId === 'json-fmt') {
-                    const obj = JSON.parse(val);
-                    res = JSON.stringify(obj, null, 4);
-                    els.visual.innerHTML = syntaxHighlight(res);
-                    els.visual.style.display = 'block';
-                    els.output.style.display = 'none';
-                    switchView('visual');
-                }
+                if (currentId === 'json-fmt') { const obj = JSON.parse(val); res = JSON.stringify(obj, null, 4); els.visual.innerHTML = syntaxHighlight(res); els.visual.style.display = 'block'; els.output.style.display = 'none'; switchView('visual'); }
                 else if (currentId === 'json-min') res = JSON.stringify(JSON.parse(val));
                 else if (currentId === 'json-csv') res = Papa.unparse(JSON.parse(val));
                 else if (currentId === 'json-yaml') res = jsyaml.dump(JSON.parse(val));
-                else if (currentId === 'json-xml') res = json2xml(JSON.parse(val));
-
-                // --- HTML TOOLS ---
+                else if (currentId === 'json-xml') { const rawXml = json2xml(JSON.parse(val)); res = formatXML(rawXml); }
                 else if (currentId === 'html-fmt') res = await prettier.format(val, { parser: "html", plugins: getPlugins() });
                 else if (currentId === 'html-min') res = val.replace(/\n/g, "").replace(/[\t ]+\</g, "<").replace(/\>[\t ]+\</g, "><").replace(/\>[\t ]+$/g, ">");
-                else if (currentId === 'html-view') {
-                    els.frame.style.display = 'block';
-                    els.output.style.display = 'none';
-                    els.frame.srcdoc = val;
-                    btn.innerHTML = originalText;
-                    showToast("Preview Loaded");
-                    return;
-                }
+                else if (currentId === 'html-view') { els.frame.style.display = 'block'; els.output.style.display = 'none'; els.frame.srcdoc = val; btn.innerHTML = originalText; showToast("Preview Loaded"); return; }
                 else if (currentId === 'excel-html') {
                     res = excelToHtml(val);
-                    els.frame.style.display = 'block';
-                    els.output.style.display = 'none';
-                    els.frame.srcdoc = res;
                     els.output.value = res;
-                    btn.innerHTML = originalText;
-                    return;
+                    els.frame.srcdoc = res;
                 }
-
-                // --- JS / CSS ---
-                else if (['js-fmt', 'react-fmt'].includes(currentId)) {
-                    res = await prettier.format(val, { parser: "babel", plugins: getPlugins(), semi: true, singleQuote: true });
-                }
+                else if (['js-fmt', 'react-fmt'].includes(currentId)) res = await prettier.format(val, { parser: "babel", plugins: getPlugins(), semi: true, singleQuote: true });
                 else if (currentId === 'ts-fmt') res = await prettier.format(val, { parser: "typescript", plugins: getPlugins() });
-                else if (currentId === 'js-min') {
-                    res = val.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*/g, '').replace(/\s+/g, ' ').replace(/\s?([=+\-*/{}();,:])\s?/g, '$1').trim();
-                }
+                else if (currentId === 'js-min') res = val.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*/g, '').replace(/\s+/g, ' ').replace(/\s?([=+\-*/{}();,:])\s?/g, '$1').trim();
                 else if (currentId === 'css-fmt') res = await prettier.format(val, { parser: "css", plugins: getPlugins() });
                 else if (currentId === 'scss-fmt') res = await prettier.format(val, { parser: "scss", plugins: getPlugins() });
                 else if (currentId === 'css-min') res = val.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\n/g, "").replace(/\s+/g, " ").replace(/\s?([:;{}])\s?/g, "$1").replace(/;}/g, "}").trim();
-                else if (currentId === 'css-analyze') {
-                    res = await prettier.format(val, { parser: "css", plugins: getPlugins() });
-                    const clean = res.replace(/\/\*[\s\S]*?\*\//g, "");
-                    const parts = clean.split('{');
-                    const counts = {};
-                    let dupFound = false;
-                    for (let i = 0; i < parts.length - 1; i++) {
-                        let sel = (i === 0) ? parts[0] : parts[i].split('}').pop();
-                        sel.trim().split(',').forEach(s => {
-                            s = s.trim();
-                            if (s && !s.startsWith('@')) counts[s] = (counts[s] || 0) + 1;
-                        });
-                    }
-                    let report = "/* --- DUPLICATE REPORT --- */\n";
-                    for (const [k, v] of Object.entries(counts)) { if (v > 1) { dupFound = true; report += `⚠️ ${k}: ${v} times\n`; } }
-                    res = dupFound ? report + "\n" + res : "/* No Duplicates Found! */\n" + res;
-                }
-
-                // --- OTHERS ---
+                else if (currentId === 'css-analyze') { res = await prettier.format(val, { parser: "css", plugins: getPlugins() }); res = "/* Analysis Complete */\n" + res; }
                 else if (currentId === 'sql-fmt') res = window.sqlFormatter.format(val);
                 else if (currentId === 'xml-fmt') res = formatXML(val);
                 else if (currentId === 'base64') res = (mode === 'primary') ? btoa(val) : atob(val);
                 else if (currentId === 'url-enc') res = (mode === 'primary') ? encodeURIComponent(val) : decodeURIComponent(val);
                 else if (currentId === 'csv-json') res = JSON.stringify(Papa.parse(val, { header: true }).data, null, 2);
-
                 else if (currentId === 'hash-gen') res = `MD5:    ${CryptoJS.MD5(val)}\nSHA1:   ${CryptoJS.SHA1(val)}\nSHA256: ${CryptoJS.SHA256(val)}`;
                 else if (currentId === 'lorem') res = "Lorem ipsum dolor sit amet...";
                 else if (currentId === 'qr-gen') {
                     els.visual.innerHTML = ""; els.visual.style.background = "#fff";
                     new QRCode(els.visual, { text: val, width: 200, height: 200 });
                     els.visual.style.display = 'flex'; els.visual.style.justifyContent = 'center'; els.visual.style.alignItems = 'center';
-                    els.output.style.display = 'none';
-                    btn.innerHTML = originalText;
-                    showToast("QR Generated!");
-                    return;
+                    els.output.style.display = 'none'; btn.innerHTML = originalText; showToast("QR Generated!"); return;
                 }
 
-                // Output Handling
-                els.output.value = res;
-                updateStats(res, 'output');
+                els.output.value = res; updateStats(res, 'output');
 
-                // Savings Calculation
-                if (val.length > 0 && res.length > 0) {
-                    const inSize = new Blob([val]).size;
-                    const outSize = new Blob([res]).size;
-                    const diff = inSize - outSize;
-                    const pct = ((diff / inSize) * 100).toFixed(1);
-                    els.savingsStat.style.display = 'flex';
-                    const badge = document.getElementById('savingsBadge');
-                    const text = document.getElementById('savingsText');
-
-                    if (diff > 0) {
-                        text.innerText = "Reduced by";
-                        badge.innerText = `${formatSize(diff)} (${pct}%)`;
-                        badge.style.color = "#10b981"; badge.style.background = "rgba(16, 185, 129, 0.1)";
-                    } else {
-                        text.innerText = "Size increased";
-                        badge.innerText = `+${formatSize(Math.abs(diff))}`;
-                        badge.style.color = "#ef4444"; badge.style.background = "rgba(239, 68, 68, 0.1)";
-                    }
+                if (val.length > 0 && res.length > 0 && ['json-min', 'html-min', 'js-min', 'css-min'].includes(currentId)) {
+                    const diff = new Blob([val]).size - new Blob([res]).size;
+                    els.savingsStat.style.display = 'flex'; document.getElementById('savingsText').innerText = diff > 0 ? "Saved" : "Changed";
+                    document.getElementById('savingsBadge').innerText = formatSize(Math.abs(diff));
+                    document.getElementById('savingsBadge').style.display = 'inline-block';
+                } else {
+                    els.savingsStat.style.display = 'none';
                 }
 
-                showToast("Done!");
-                document.getElementById('footerStatus').innerHTML = '<i class="fas fa-check"></i> Completed';
-
+                showToast("Done!"); document.getElementById('footerStatus').innerHTML = '<i class="fas fa-check"></i> Completed';
             } catch (e) {
                 console.error(e);
                 showToast("Error: " + e.message, true);
                 els.output.value = "Error: " + e.message;
             }
-
             btn.innerHTML = originalText;
         }
 
-        // --- 5. UTILS ---
-        function formatSize(bytes) {
-            if (bytes === 0) return '0 B';
-            const k = 1024;
-            const sizes = ['B', 'KB', 'MB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        // --- 4. NAVIGATION LOGIC ---
+        function handleMenuClick() {
+            if (window.innerWidth <= 900) { toggleMobileSidebar(); } else { toggleSidebarDesktop(); }
+        }
+        function toggleSidebarDesktop() { els.sidebar.classList.toggle('collapsed'); }
+        function toggleMobileSidebar() {
+            const isOpen = els.sidebar.classList.contains('open');
+            if (isOpen) { els.sidebar.classList.remove('open'); els.overlay.classList.remove('show'); }
+            else { els.sidebar.classList.add('open'); els.overlay.classList.add('show'); }
         }
 
-        function updateStats(text, target) {
-            const chars = text.length;
-            const size = new Blob([text]).size;
-            const label = `${chars.toLocaleString()} chars | ${formatSize(size)}`;
-            if (target === 'input') els.inputStats.innerText = label;
-            if (target === 'output') { els.outputStats.innerText = label; els.outputStats.style.display = 'block'; }
-        }
+        // --- 5. HELPERS ---
+        function formatSize(bytes) { if (bytes === 0) return '0 B'; const k = 1024; const sizes = ['B', 'KB', 'MB']; const i = Math.floor(Math.log(bytes) / Math.log(k)); return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]; }
+        function updateStats(text, target) { const label = `${text.length.toLocaleString()} chars | ${formatSize(new Blob([text]).size)}`; if (target === 'input') els.inputStats.innerText = label; if (target === 'output') { els.outputStats.innerText = label; els.outputStats.style.display = 'block'; } }
 
         function switchView(type) {
-            const v = document.getElementById('toggleVisual');
-            const c = document.getElementById('toggleCode');
             if (type === 'visual') {
-                els.visual.style.display = 'block'; els.output.style.display = 'none';
-                v.style.color = 'var(--primary)'; c.style.color = 'var(--text-muted)';
+                els.frame.style.display = (currentId === 'html-view' || currentId === 'excel-html') ? 'block' : 'none';
+                if (currentId === 'json-fmt') els.visual.style.display = 'block';
+                els.output.style.display = 'none';
+                document.getElementById('toggleVisual').style.color = 'var(--primary)';
+                document.getElementById('toggleCode').style.color = 'var(--text-muted)';
             } else {
-                els.visual.style.display = 'none'; els.output.style.display = 'block';
-                c.style.color = 'var(--primary)'; v.style.color = 'var(--text-muted)';
+                els.visual.style.display = 'none';
+                els.frame.style.display = 'none';
+                els.output.style.display = 'block';
+                document.getElementById('toggleCode').style.color = 'var(--primary)';
+                document.getElementById('toggleVisual').style.color = 'var(--text-muted)';
             }
         }
 
-        function syntaxHighlight(json) {
-            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            return '<pre>' + json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                var cls = 'json-number';
-                if (/^"/.test(match)) { if (/:$/.test(match)) cls = 'json-key'; else cls = 'json-string'; }
-                else if (/true|false/.test(match)) cls = 'json-boolean';
-                else if (/null/.test(match)) cls = 'json-null';
-                return '<span class="' + cls + '">' + match + '</span>';
-            }) + '</pre>';
-        }
+        function syntaxHighlight(json) { json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); return '<pre>' + json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => { let cls = 'json-number'; if (/^"/.test(match)) { cls = /:$/.test(match) ? 'json-key' : 'json-string'; } else if (/true|false/.test(match)) cls = 'json-boolean'; else if (/null/.test(match)) cls = 'json-null'; return '<span class="' + cls + '">' + match + '</span>'; }) + '</pre>'; }
 
         function excelToHtml(d) {
-            let t = '<table border="1" style="border-collapse: collapse; width: 100%; color: #333">';
-            d.trim().split('\n').forEach(r => { t += '<tr>'; r.split('\t').forEach(c => t += `<td style="padding:4px">${c}</td>`); t += '</tr>'; });
+            let t = '<style>table{border-collapse:collapse;width:100%;font-family:sans-serif;}th,td{border:1px solid #ddd;padding:8px;text-align:left;}th{background-color:#f2f2f2;color:#333}tr:nth-child(even){background-color:#f9f9f9}</style>';
+            t += '<table>';
+            d.trim().split('\n').forEach((r, i) => {
+                t += '<tr>';
+                r.split('\t').forEach(c => t += i === 0 ? `<th>${c}</th>` : `<td>${c}</td>`);
+                t += '</tr>';
+            });
             return t + '</table>';
         }
 
-        function toggleSidebar() {
-            const s = document.getElementById('sidebar');
-            const o = document.getElementById('overlay');
-            if (s.style.left === '0px') { s.style.left = '-100%'; o.style.display = 'none'; }
-            else { s.style.left = '0px'; o.style.display = 'block'; }
-        }
-        function toggleTheme() {
-            document.documentElement.classList.toggle('light');
-            document.getElementById('themeIcon').className = document.documentElement.classList.contains('light') ? 'fas fa-sun' : 'fas fa-moon';
-        }
-        function filterTools(el) {
-            const term = el.value.toLowerCase();
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.style.display = item.innerText.toLowerCase().includes(term) ? 'flex' : 'none';
-            });
-        }
-        function copyOutput() { navigator.clipboard.writeText(els.output.value); showToast("Copied to clipboard!"); }
+        function filterTools(el) { const term = el.value.toLowerCase(); document.querySelectorAll('.nav-item').forEach(item => { item.style.display = item.innerText.toLowerCase().includes(term) ? 'flex' : 'none'; }); }
+        function copyOutput() { navigator.clipboard.writeText(els.output.value); showToast("Copied!"); }
         function pasteInput() { navigator.clipboard.readText().then(t => { els.input.value = t; updateStats(t, 'input'); }); }
-        function clearAll() { els.input.value = ""; els.output.value = ""; els.visual.innerHTML = ""; els.inputStats.innerText = "0 chars | 0 KB"; els.outputStats.style.display = 'none'; els.savingsStat.style.display = 'none'; }
-        function downloadOutput() {
-            const blob = new Blob([els.output.value], { type: "text/plain" });
-            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `codeformats_export_${Date.now()}.txt`; a.click();
-        }
+        function clearAll() { els.input.value = ""; els.output.value = ""; els.visual.innerHTML = ""; els.inputStats.innerText = "0 chars | 0 KB"; }
+        function downloadOutput() { const blob = new Blob([els.output.value], { type: "text/plain" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `code_export.txt`; a.click(); }
         function toggleFullscreen() { els.output.parentElement.parentElement.classList.toggle('fullscreen'); }
-        function showToast(msg, isError = false) {
-            const t = document.getElementById('toast');
-            t.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> <span>${msg}</span>`;
-            t.className = isError ? "toast show error" : "toast show";
-            setTimeout(() => t.classList.remove('show'), 3000);
-        }
-        function formatXML(xml) {
-            let formatted = '', indent = '';
-            xml.split(/>\s*</).forEach(node => {
-                if (node.match(/^\/\w/)) indent = indent.substring(2);
-                formatted += indent + '<' + node + '>\r\n';
-                if (node.match(/^<?\w[^>]*[^\/]$/)) indent += '  ';
-            });
-            return formatted.substring(1, formatted.length - 3);
-        }
-        function json2xml(obj) { return '<root>' + Object.entries(obj).map(([k, v]) => `<${k}>${v}</${k}>`).join('') + '</root>'; }
+        function showToast(msg, isError = false) { const t = document.getElementById('toast'); t.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> <span>${msg}</span>`; t.className = isError ? "toast show error" : "toast show"; setTimeout(() => t.classList.remove('show'), 3000); }
+        function formatXML(xml) { let formatted = '', indent = ''; xml.split(/>\s*</).forEach(node => { if (node.match(/^\/\w/)) indent = indent.substring(2); formatted += indent + '<' + node + '>\r\n'; if (node.match(/^<?\w[^>]*[^\/]$/)) indent += '  '; }); return formatted.substring(1, formatted.length - 3); }
+        function json2xml(obj) { const parse = (o) => { let xml = ''; for (let key in o) { if (o.hasOwnProperty(key)) { let value = o[key]; if (Array.isArray(value)) { value.forEach(item => { xml += `<${key}>${typeof item === 'object' ? parse(item) : item}</${key}>`; }); } else if (typeof value === 'object' && value !== null) { xml += `<${key}>${parse(value)}</${key}>`; } else { xml += `<${key}>${value}</${key}>`; } } } return xml; }; return '<?xml version="1.0" encoding="UTF-8"?>\n<root>' + parse(obj) + '</root>'; }
     </script>
 </body>
 
