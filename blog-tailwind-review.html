@@ -4,273 +4,742 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tailwind CSS: Is it Worth the Hype? (My Honest Review)</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap">
+
+    <title>Tailwind CSS: Is It Worth The Hype? An Engineering Review (2025)</title>
+    <meta name="description"
+        content="A deep dive into Tailwind CSS. We analyze developer velocity, bundle size performance (JIT), maintainability, and why 'Ugly HTML' is actually a feature, not a bug.">
+    <meta name="keywords"
+        content="tailwind css review 2025, utility first css vs semantic css, tailwind vs bootstrap performance, react tailwind best practices, css architecture, maintainable css">
+    <meta name="author" content="Udit Sharma">
+    <link rel="canonical" href="https://codeformats.com/blog-tailwind-review">
+
+    <meta property="og:title" content="Tailwind CSS: Is It Worth The Hype?">
+    <meta property="og:description" content="Why I stopped writing 'semantic' CSS and learned to love utility classes.">
+    <meta property="og:type" content="article">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-body: #050505;
-            --bg-glass: rgba(20, 20, 23, 0.6);
-            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-body: #09090b;
+            --bg-card: rgba(24, 24, 27, 0.6);
+            --bg-code: #121214;
             --border: #27272a;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --border-highlight: #3f3f46;
+
+            --primary: #818cf8;
+            --primary-glow: rgba(129, 140, 248, 0.15);
+            --secondary: #10b981;
+            --danger: #f87171;
+            --warning: #fbbf24;
+
             --text-main: #e4e4e7;
             --text-muted: #a1a1aa;
-            --font-ui: 'Inter';
-            --font-code: 'JetBrains Mono';
+            --text-dim: #71717a;
+
+            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        /* --- GLOBAL RESET & LAYOUT --- */
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-body);
-            background-image: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.08), transparent 40%);
+            background-color: var(--bg-body);
+            /* Technical Grid Background */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+
             color: var(--text-main);
             font-family: var(--font-ui);
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
+        /* SCROLL PROGRESS BAR */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--primary);
+            width: 0%;
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* MAIN WRAPPER */
         .wrapper {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px 120px 20px;
+            position: relative;
         }
 
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 15px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        .nav-back:hover {
-            color: #fff;
-            transform: translateX(-2px);
-        }
-
-        article h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 8px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .meta-info {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-bottom: 25px;
+        /* --- NAVIGATION --- */
+        .nav-header {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             border-bottom: 1px solid var(--border);
             padding-bottom: 15px;
         }
 
-        .meta-info i {
+        .nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: #fff;
+        }
+
+        .brand-logo {
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        article h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin: 0 0 15px 0;
+            background: linear-gradient(180deg, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: var(--font-code);
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .meta-row span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-row i {
             color: var(--primary);
-            font-size: 0.75rem;
         }
 
         article p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #d4d4d8;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         article h2 {
-            font-size: 1.4rem;
-            margin-top: 32px;
-            margin-bottom: 10px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        article h2::before {
+            content: '#';
+            color: var(--primary);
+            opacity: 0.4;
+            margin-right: 8px;
+        }
+
+        article h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+
+        strong {
             color: #fff;
             font-weight: 700;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 24px;
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* --- COMPONENTS --- */
+
+        /* TOC */
+        .toc {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 50px;
+            font-size: 0.9rem;
+        }
+
+        .toc summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toc summary:hover {
+            color: #fff;
+        }
+
+        .toc ul {
+            margin: 15px 0 0 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 8px;
+        }
+
+        .toc a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+            display: block;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        /* IDE CODE BLOCKS */
+        .code-wrapper {
+            position: relative;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-code);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 15px;
+            background: #18181b;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: var(--font-ui);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
 
         code {
             font-family: var(--font-code);
-            color: #a5d6ff;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            color: #a5b4fc;
         }
 
-        .cta-box {
-            background: rgba(99, 102, 241, 0.05);
-            border: 1px dashed var(--border);
-            border-left: 3px solid var(--primary);
-            padding: 20px;
+        .token-tag {
+            color: #f87171;
+        }
+
+        .token-attr {
+            color: #67e8f9;
+        }
+
+        .token-val {
+            color: #fca5a5;
+        }
+
+        .token-comment {
+            color: #52525b;
+            font-style: italic;
+        }
+
+        /* CALLOUTS */
+        .callout {
+            background: rgba(129, 140, 248, 0.05);
+            border: 1px solid rgba(129, 140, 248, 0.2);
             border-radius: 8px;
+            padding: 20px;
             margin: 30px 0;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            align-items: flex-start;
         }
 
-        .cta-box h3 {
-            margin: 0;
-            font-size: 1.1rem;
+        .callout i {
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .callout h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
             color: #fff;
         }
 
-        .cta-box p {
+        .callout p {
             margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .callout.danger {
+            background: rgba(248, 113, 113, 0.05);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+
+        .callout.danger i {
+            color: var(--danger);
+        }
+
+        /* --- CTAs --- */
+        .sticky-cta {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-highlight);
+            padding: 10px 10px 10px 25px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2s backwards;
+        }
+
+        .sticky-text {
             font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
         }
 
-        .cta-btn {
-            align-self: start;
-            background: var(--primary);
+        .sticky-text span {
+            color: var(--text-dim);
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, var(--primary), #6366f1);
             color: #fff;
-            padding: 8px 20px;
-            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 50px;
             font-size: 0.85rem;
-            transition: 0.2s;
-            margin-top: 5px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: transform 0.2s;
+            white-space: nowrap;
         }
 
-        .cta-btn:hover {
-            background: #4f46e5;
+        .cta-btn-primary:hover {
+            transform: scale(1.05);
         }
 
-        .related-section {
-            margin-top: 50px;
-            border-top: 1px solid var(--border);
-            padding-top: 30px;
+        /* INLINE TOOL CARD */
+        .tool-card {
+            background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.4) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .related-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.25;
+            z-index: -1;
+        }
+
+        .tool-card h3 {
+            margin: 0 0 15px 0;
             color: #fff;
+            font-size: 1.4rem;
         }
 
+        .tool-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translate(-50%, 100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* --- RELATED SECTION --- */
         .related-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
         }
 
         .related-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 25px;
             text-decoration: none;
-            transition: 0.2s;
-            display: block;
+            transition: all 0.2s;
         }
 
         .related-card:hover {
             border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .related-tag {
-            font-size: 0.65rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 5px;
-            display: block;
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .related-card h3 {
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
             color: #fff;
-            margin: 0 0 5px 0;
-            line-height: 1.4;
         }
 
         .related-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: var(--text-dim);
             margin: 0;
-            line-height: 1.4;
         }
 
+        /* --- FOOTER --- */
         footer {
-            margin-top: 40px;
+            margin-top: 80px;
             text-align: center;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--text-dim);
             border-top: 1px solid var(--border);
-            padding-top: 20px;
-            font-size: 0.8rem;
+            padding: 40px 0;
         }
 
         @media(max-width: 600px) {
+            .wrapper {
+                padding: 20px 15px 100px 15px;
+            }
+
+            article h1 {
+                font-size: 2rem;
+            }
+
             .related-grid {
                 grid-template-columns: 1fr;
             }
 
-            article h1 {
-                font-size: 1.6rem;
+            .sticky-text {
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <div class="wrapper">
-        <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        <nav class="nav-header">
+            <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> All Articles</a>
+            <div class="brand-logo">Code Formats</div>
+        </nav>
+
         <article>
             <h1>Tailwind CSS: Is it Worth the Hype? (My Honest Review)</h1>
-            <div class="meta-info">
-                <span><i class="far fa-user"></i> Udit Sharma</span>
-                <span><i class="far fa-clock"></i> 5 Min Read</span>
+
+            <div class="meta-row">
+                <span><i class="far fa-user-circle"></i> Udit Sharma</span>
+                <span><i class="far fa-calendar-alt"></i> Jan 29, 2025</span>
+                <span><i class="far fa-clock"></i> 15 Min Read</span>
             </div>
 
-            <p>When I first saw Tailwind, I hated it. <em>"Why would I clutter my HTML with 20 classes?"</em> I thought.
-                <em>"This is just inline styles with extra steps!"</em>
-            </p>
-            <p>But after using it for one project, I couldn't go back to standard CSS. Here is why.</p>
+            <details class="toc" open>
+                <summary>Table of Contents</summary>
+                <ul>
+                    <li><a href="#intro">The "Ugly HTML" Reaction</a></li>
+                    <li><a href="#naming">1. The Death of Class Naming</a></li>
+                    <li><a href="#consistency">2. Automatic Design Consistency</a></li>
+                    <li><a href="#performance">3. Performance: The 10KB CSS File</a></li>
+                    <li><a href="#context">4. No More Context Switching</a></li>
+                    <li><a href="#apply">5. The `@apply` Trap (Don't Do It)</a></li>
+                    <li><a href="#drawbacks">6. The Real Drawbacks</a></li>
+                    <li><a href="#verdict">7. Final Verdict</a></li>
+                </ul>
+            </details>
 
-            <h2>1. No More Naming Things</h2>
-            <p>The hardest part of CSS is naming classes. <code>.sidebar-wrapper-inner-container</code>? No thanks. With
-                Tailwind, you just write <code>flex p-4 bg-gray-900</code> and you are done.</p>
+            <p id="intro">When I first saw Tailwind CSS in 2018, I hated it. I looked at the code examples and thought:
+                <em>"Why are we going backwards? This is just inline styles with extra steps! What happened to
+                    Separation of Concerns?"</em></p>
 
-            <h2>2. Consistency is Automatic</h2>
-            <p>With standard CSS, you might use <code>margin: 18px</code> in one place and <code>margin: 20px</code> in
-                another. Tailwind forces you to use a design system (m-4, m-5), making your UI look consistent.</p>
+            <p>I resisted it for two years. I stuck to BEM (Block Element Modifier) and SASS. But in 2020, I was forced
+                to use it for a client project. Within 48 hours, my opinion shifted from "This is garbage" to "I am
+                never writing vanilla CSS again."</p>
 
-            <div class="cta-box">
-                <h3>Clean up your CSS</h3>
-                <p>Messy code affects SEO. Minify your CSS before deploying.</p>
-                <a href="index.html" class="cta-btn">Minify CSS</a>
+            <p>In this engineering review, I will explain exactly why Tailwind won the CSS war, and why it is likely the
+                best choice for your next project in 2025.</p>
+
+            <h2 id="naming">1. The Death of Class Naming</h2>
+            <p>The hardest problem in computer science is cache invalidation and <strong>naming things</strong>. In
+                traditional CSS, you spend 30% of your time just thinking of class names.</p>
+
+
+
+            <div class="code-wrapper">
+                <div class="code-header">Traditional CSS (BEM)</div>
+                <pre><code><span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"user-profile__card-container--active"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;img</span> <span class="token-attr">class</span>=<span class="token-val">"user-profile__avatar"</span> /<span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"user-profile__bio-text"</span><span class="token-tag">&gt;</span>...<span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code></pre>
             </div>
 
-            <p><strong>Verdict:</strong> It looks ugly in code, but it makes you develop 2x faster. Give it a try.</p>
+            <p>With Tailwind, you stop inventing names for wrapper divs. You just style them.</p>
+
+            <div class="code-wrapper">
+                <div class="code-header">Tailwind CSS</div>
+                <pre><code><span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"flex p-6 bg-white rounded-lg shadow-xl"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;img</span> <span class="token-attr">class</span>=<span class="token-val">"w-16 h-16 rounded-full"</span> /<span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"ml-4"</span><span class="token-tag">&gt;</span>...<span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code></pre>
+            </div>
+
+            <p><strong>The Benefit:</strong> You never have to worry that changing a class in one file will break a
+                layout in a completely different file. The styles are <strong>colocated</strong> with the HTML.</p>
+
+            <h2 id="consistency">2. Automatic Design Consistency</h2>
+            <p>In standard CSS, "Magic Numbers" appear everywhere. One developer uses <code>margin: 18px</code>, another
+                uses <code>margin: 20px</code>. The UI starts to look messy.</p>
+
+            <p>Tailwind enforces a <strong>Design System</strong>. You can't just pick "any" margin. You have to pick
+                from the scale: <code>m-4</code> (16px), <code>m-5</code> (20px), <code>m-6</code> (24px).</p>
+            <p>This constraint breeds consistency. Without even trying, your buttons, cards, and inputs all align
+                perfectly because they are using the same underlying math.</p>
+
+            <div class="tool-card">
+                <h3>⚡ Clean Your CSS</h3>
+                <p>Is your CSS file bloated with unused classes? Use our free minifier to reduce file size before
+                    deployment.</p>
+                <a href="https://codeformats.com" class="cta-btn-primary" style="display:inline-block;">
+                    Minify CSS Now
+                </a>
+            </div>
+
+            <h2 id="performance">3. Performance: The 10KB CSS File</h2>
+            <p>With traditional CSS, your CSS file grows linearly with your project. More pages = More CSS. I've seen
+                projects with 2MB CSS bundles.</p>
+
+            <p>With Tailwind, your CSS file size <strong>plateaus</strong>. Once you have used <code>flex</code>,
+                <code>p-4</code>, and <code>text-center</code> once, reusing them costs <strong>zero bytes</strong>. The
+                class is already defined.</p>
+
+            <div class="callout">
+                <i class="fas fa-microchip"></i>
+                <div class="callout-content">
+                    <h4>The JIT (Just-in-Time) Engine</h4>
+                    <p>Tailwind's compiler scans your HTML files and generates <em>only</em> the CSS classes you
+                        actually used. It doesn't ship the whole library. Most production Tailwind sites have a CSS
+                        bundle smaller than 10KB (Gzipped).</p>
+                </div>
+            </div>
+
+            <h2 id="context">4. No More Context Switching</h2>
+            <p>When you write standard CSS, your workflow looks like this:</p>
+            <ol>
+                <li>Write HTML in `Component.jsx`.</li>
+                <li>Switch file to `Component.module.css`.</li>
+                <li>Write CSS.</li>
+                <li>Switch back to JSX to check class name.</li>
+                <li>Switch back to CSS to tweak margin.</li>
+                <li>Repeat 500 times.</li>
+            </ol>
+
+            <p>With Tailwind, you stay in your HTML/JSX file. You style things <em>as you build the structure</em>. This
+                "Flow State" is addictive and significantly increases developer velocity.</p>
+
+            <h2 id="apply">5. The `@apply` Trap (Don't Do It)</h2>
+            <p>Many beginners try to "clean up" Tailwind by using the <code>@apply</code> directive to create custom
+                classes:</p>
+
+            <div class="code-wrapper">
+                <div class="code-header">Bad Practice</div>
+                <pre><code><span class="token-prop">.btn-primary</span> {
+  @apply bg-blue-500 text-white px-4 py-2 rounded;
+}</code></pre>
+            </div>
+
+            <p><strong>Avoid this.</strong> It defeats the purpose of utility classes. It re-introduces the problem of
+                naming things and increases bundle size. Instead, use <strong>React/Vue Components</strong> to abstract
+                repeatable UI patterns.</p>
+
+            <h2 id="drawbacks">6. The Real Drawbacks</h2>
+            <p>It's not all sunshine. Tailwind has legitimate downsides:</p>
+            <ul>
+                <li><strong>Ugly HTML:</strong> Your DOM becomes cluttered with class strings. (Solution: Use tools like
+                    `clsx` or `cva`).</li>
+                <li><strong>Learning Curve:</strong> You need to memorize that `justify-content: center` is
+                    <code>justify-center</code>. (Solution: Use the Tailwind IntelliSense VS Code plugin).</li>
+                <li><strong>Setup Complexity:</strong> It requires a build step (PostCSS). You can't just drop a link
+                    tag in the head anymore.</li>
+            </ul>
+
+            <div id="faq" style="margin-top: 60px; border-top: 1px solid var(--border); padding-top: 40px;">
+                <h2 style="margin-top: 0;">Frequently Asked Questions</h2>
+
+                <details
+                    style="margin-bottom: 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                    <summary
+                        style="padding: 15px 20px; cursor: pointer; font-weight: 600; color: #fff; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        Is Tailwind better than Bootstrap?
+                        <span style="color: var(--primary); font-size: 1.2rem;">+</span>
+                    </summary>
+                    <div
+                        style="padding: 0 20px 20px 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        Yes, for modern custom designs. Bootstrap gives you pre-built components (Buttons, Navbars)
+                        which makes your site look like everyone else's. Tailwind gives you low-level utilities to build
+                        <em>your own</em> design system faster.
+                    </div>
+                </details>
+
+                <details
+                    style="margin-bottom: 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                    <summary
+                        style="padding: 15px 20px; cursor: pointer; font-weight: 600; color: #fff; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        Does Tailwind work with React/Next.js?
+                        <span style="color: var(--primary); font-size: 1.2rem;">+</span>
+                    </summary>
+                    <div
+                        style="padding: 0 20px 20px 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        Absolutely. It is the default styling solution for Next.js. The component-based architecture of
+                        React pairs perfectly with utility classes, allowing you to encapsulate styles inside components
+                        rather than global CSS files.
+                    </div>
+                </details>
+            </div>
+
+            <h2 id="verdict">7. Final Verdict</h2>
+            <p>Tailwind CSS is an "ugly" solution to a beautiful problem. It sacrifices the aesthetics of your HTML code
+                to give you speed, maintainability, and a smaller bundle size.</p>
+            <p>If you are building a custom design in 2025, Tailwind is arguably the most efficient way to do it. Once
+                you get past the initial shock of the class names, you will fly.</p>
+
         </article>
 
-        <div class="related-section">
-            <h3 class="related-title">Read Next</h3>
-            <div class="related-grid">
-                <a href="blog-vscode-tools.html" class="related-card">
-                    <span class="related-tag">#Tools</span>
-                    <h3>VS Code Extensions</h3>
-                    <p>For Tailwind & React.</p>
-                </a>
-                <a href="blog-button-design.html" class="related-card">
-                    <span class="related-tag">#UI</span>
-                    <h3>Button Design Guide</h3>
-                    <p>Styles that get clicks.</p>
-                </a>
-            </div>
+        <div class="related-grid">
+            <a href="blog-button-design-guide.html" class="related-card">
+                <h3>Button Design Guide</h3>
+                <p>How to design clickable UI elements (using Tailwind).</p>
+            </a>
+            <a href="blog-css-minification-seo.html" class="related-card">
+                <h3>Minification & SEO</h3>
+                <p>Why small CSS files matter for ranking.</p>
+            </a>
         </div>
-        <footer>&copy; 2025 Code Formats by Udit Sharma.</footer>
+
+        <footer>
+            &copy; 2025 Code Formats. Built by Udit Sharma.
+        </footer>
     </div>
+
+    <div class="sticky-cta">
+        <div class="sticky-text">
+            Struggling with CSS? <span>Format it instantly.</span>
+        </div>
+        <a href="https://codeformats.com" class="cta-btn-primary">
+            Use CSS Formatter <i class="fas fa-bolt"></i>
+        </a>
+    </div>
+
+    <script>
+        // Progress Bar Logic
+        window.onscroll = function () {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+    </script>
 </body>
 
 </html>

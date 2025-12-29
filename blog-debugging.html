@@ -4,271 +4,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Debug Minified JavaScript in Chrome</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap">
+
+    <title>How to Debug Minified JavaScript in Chrome: The Definitive Guide (2025)</title>
+    <meta name="description"
+        content="Stop staring at 'a.b is not a function'. Learn to debug production code using Chrome DevTools Pretty Print, Source Maps, and advanced Breakpoint strategies.">
+    <meta name="keywords"
+        content="debug minified javascript, chrome devtools source maps, webpack source maps, vite build sourcemap, javascript debugging techniques, pretty print javascript, react production debugging">
+    <meta name="author" content="Udit Sharma">
+    <link rel="canonical" href="https://codeformats.com/blog-debug-minified-js">
+
+    <meta property="og:title" content="How to Debug Minified JavaScript in Chrome">
+    <meta property="og:description" content="A masterclass on debugging production code. Stop guessing, start fixing.">
+    <meta property="og:type" content="article">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
-        /* PASTE MASTER COMPACT CSS HERE */
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-body: #050505;
-            --bg-glass: rgba(20, 20, 23, 0.6);
-            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-body: #09090b;
+            --bg-card: rgba(24, 24, 27, 0.6);
+            --bg-code: #121214;
             --border: #27272a;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --border-highlight: #3f3f46;
+
+            --primary: #818cf8;
+            --primary-glow: rgba(129, 140, 248, 0.15);
+            --secondary: #10b981;
+            --danger: #f87171;
+            --warning: #fbbf24;
+
             --text-main: #e4e4e7;
             --text-muted: #a1a1aa;
-            --font-ui: 'Inter';
-            --font-code: 'JetBrains Mono';
+            --text-dim: #71717a;
+
+            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        /* --- GLOBAL RESET & LAYOUT --- */
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-body);
-            background-image: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.08), transparent 40%);
+            background-color: var(--bg-body);
+            /* Technical Grid Background */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+
             color: var(--text-main);
             font-family: var(--font-ui);
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
+        /* SCROLL PROGRESS BAR */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--primary);
+            width: 0%;
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* MAIN WRAPPER */
         .wrapper {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px 120px 20px;
+            position: relative;
         }
 
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 15px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        .nav-back:hover {
-            color: #fff;
-            transform: translateX(-2px);
-        }
-
-        article h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 8px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .meta-info {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-bottom: 25px;
+        /* --- NAVIGATION --- */
+        .nav-header {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             border-bottom: 1px solid var(--border);
             padding-bottom: 15px;
         }
 
-        .meta-info i {
+        .nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: #fff;
+        }
+
+        .brand-logo {
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        article h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin: 0 0 15px 0;
+            background: linear-gradient(180deg, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: var(--font-code);
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .meta-row span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-row i {
             color: var(--primary);
-            font-size: 0.75rem;
         }
 
         article p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #d4d4d8;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         article h2 {
-            font-size: 1.4rem;
-            margin-top: 32px;
-            margin-bottom: 10px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        article h2::before {
+            content: '#';
+            color: var(--primary);
+            opacity: 0.4;
+            margin-right: 8px;
+        }
+
+        article h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+
+        strong {
             color: #fff;
             font-weight: 700;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 24px;
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* --- COMPONENTS --- */
+
+        /* TOC */
+        .toc {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 50px;
+            font-size: 0.9rem;
+        }
+
+        .toc summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toc summary:hover {
+            color: #fff;
+        }
+
+        .toc ul {
+            margin: 15px 0 0 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 8px;
+        }
+
+        .toc a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+            display: block;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        /* IDE CODE BLOCKS */
+        .code-wrapper {
+            position: relative;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-code);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 15px;
+            background: #18181b;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: var(--font-ui);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
 
         code {
             font-family: var(--font-code);
-            color: #a5d6ff;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            color: #a5b4fc;
         }
 
-        .cta-box {
-            background: rgba(99, 102, 241, 0.05);
-            border: 1px dashed var(--border);
-            border-left: 3px solid var(--primary);
-            padding: 20px;
+        .token-prop {
+            color: #67e8f9;
+        }
+
+        .token-val {
+            color: #fca5a5;
+        }
+
+        .token-comment {
+            color: #52525b;
+            font-style: italic;
+        }
+
+        /* INLINE CODE */
+        p code {
+            background: #27272a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #fff;
+            border: 1px solid #3f3f46;
+        }
+
+        /* CALLOUTS */
+        .callout {
+            background: rgba(129, 140, 248, 0.05);
+            border: 1px solid rgba(129, 140, 248, 0.2);
             border-radius: 8px;
+            padding: 20px;
             margin: 30px 0;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            align-items: flex-start;
         }
 
-        .cta-box h3 {
-            margin: 0;
-            font-size: 1.1rem;
+        .callout i {
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .callout h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
             color: #fff;
         }
 
-        .cta-box p {
+        .callout p {
             margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .callout.danger {
+            background: rgba(248, 113, 113, 0.05);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+
+        .callout.danger i {
+            color: var(--danger);
+        }
+
+        /* --- CTAs --- */
+        .sticky-cta {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-highlight);
+            padding: 10px 10px 10px 25px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2s backwards;
+        }
+
+        .sticky-text {
             font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
         }
 
-        .cta-btn {
-            align-self: start;
-            background: var(--primary);
+        .sticky-text span {
+            color: var(--text-dim);
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, var(--primary), #6366f1);
             color: #fff;
-            padding: 8px 20px;
-            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 50px;
             font-size: 0.85rem;
-            transition: 0.2s;
-            margin-top: 5px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: transform 0.2s;
+            white-space: nowrap;
         }
 
-        .cta-btn:hover {
-            background: #4f46e5;
+        .cta-btn-primary:hover {
+            transform: scale(1.05);
         }
 
-        .related-section {
-            margin-top: 50px;
-            border-top: 1px solid var(--border);
-            padding-top: 30px;
+        /* INLINE TOOL CARD */
+        .tool-card {
+            background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.4) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .related-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.25;
+            z-index: -1;
+        }
+
+        .tool-card h3 {
+            margin: 0 0 15px 0;
             color: #fff;
+            font-size: 1.4rem;
         }
 
+        .tool-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translate(-50%, 100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* --- RELATED SECTION --- */
         .related-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
         }
 
         .related-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 25px;
             text-decoration: none;
-            transition: 0.2s;
-            display: block;
+            transition: all 0.2s;
         }
 
         .related-card:hover {
             border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .related-tag {
-            font-size: 0.65rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 5px;
-            display: block;
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .related-card h3 {
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
             color: #fff;
-            margin: 0 0 5px 0;
-            line-height: 1.4;
         }
 
         .related-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: var(--text-dim);
             margin: 0;
-            line-height: 1.4;
         }
 
+        /* --- FOOTER --- */
         footer {
-            margin-top: 40px;
+            margin-top: 80px;
             text-align: center;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--text-dim);
             border-top: 1px solid var(--border);
-            padding-top: 20px;
-            font-size: 0.8rem;
+            padding: 40px 0;
         }
 
         @media(max-width: 600px) {
+            .wrapper {
+                padding: 20px 15px 100px 15px;
+            }
+
+            article h1 {
+                font-size: 2rem;
+            }
+
             .related-grid {
                 grid-template-columns: 1fr;
             }
 
-            article h1 {
-                font-size: 1.6rem;
+            .sticky-text {
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <div class="wrapper">
-        <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        <nav class="nav-header">
+            <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> All Articles</a>
+            <div class="brand-logo">Code Formats</div>
+        </nav>
+
         <article>
-            <h1>How to Debug Minified JavaScript in Chrome</h1>
-            <div class="meta-info">
-                <span><i class="far fa-user"></i> Udit Sharma</span>
-                <span><i class="far fa-clock"></i> 5 Min Read</span>
+            <h1>How to Debug Minified JavaScript in Chrome: The Definitive Guide (2025)</h1>
+
+            <div class="meta-row">
+                <span><i class="far fa-user-circle"></i> Udit Sharma</span>
+                <span><i class="far fa-calendar-alt"></i> Jan 30, 2025</span>
+                <span><i class="far fa-clock"></i> 16 Min Read</span>
             </div>
 
-            <p>You deployed your React app. It works locally. But in production, the console screams errors. The
-                problem? Your code looks like gibberish because it is minified.</p>
+            <details class="toc" open>
+                <summary>Table of Contents</summary>
+                <ul>
+                    <li><a href="#intro">The "Works on my Machine" Nightmare</a></li>
+                    <li><a href="#minification">1. Why Production Code Looks Like Garbage</a></li>
+                    <li><a href="#prettyprint">2. Level 1: The "Pretty Print" Trick</a></li>
+                    <li><a href="#sourcemaps">3. Level 2: The Magic of Source Maps</a></li>
+                    <li><a href="#config">4. Configuring Webpack, Vite & Next.js</a></li>
+                    <li><a href="#ignore">5. Pro Tip: The "Ignore List" (Blackboxing)</a></li>
+                    <li><a href="#security">6. Should You Ship Source Maps to Prod?</a></li>
+                </ul>
+            </details>
 
-            <h2>The Magic "{}" Button</h2>
-            <p>Open Chrome DevTools > Sources Tab. Open your minified JS file. Look at the bottom left of the code
-                window. You will see a small <strong>{}</strong> icon (Pretty Print). Click it. Chrome will visually
-                un-minify the code so you can read it.</p>
+            <p id="intro">It is 4:00 PM on a Friday. You just deployed your React application to production. You go to
+                check the live site, open the console, and see a wall of red text:
+                <code>Uncaught TypeError: e.t is not a function at main.8f3a.js:1:4302</code>.
+            </p>
 
-            <div class="cta-box">
-                <h3>Minify your code safely</h3>
-                <p>Use our JS Minifier to reduce file size without breaking your logic.</p>
-                <a href="index.html" class="cta-btn">Minify JS</a>
+            <p>Your heart sinks. In development (localhost), the error would tell you exactly which file and line number
+                caused the crash. In production, your code is <strong>minified</strong>—compressed into a single line of
+                unreadable characters to save bandwidth.</p>
+
+            <p>How do you debug variables named <code>a</code>, <code>b</code>, and <code>x</code>? In this guide, we
+                will move beyond console logs and master the art of debugging production code using Chrome DevTools.</p>
+
+            <h2 id="minification">1. Why Production Code Looks Like Garbage</h2>
+            <p>Before we fix it, we must understand why it happens. Modern bundlers (Webpack, Vite, Rollup) perform two
+                aggressive optimizations for production builds:</p>
+            <ul>
+                <li><strong>Minification:</strong> Removing whitespace, comments, and newlines.</li>
+                <li><strong>Uglification (Mangling):</strong> Renaming long variable names like
+                    <code>getUserData()</code> to short ones like <code>x()</code> to save bytes.
+                </li>
+            </ul>
+            <p>This is great for user load times, but terrible for developer debugging. The browser executes code that
+                looks like this:</p>
+
+            <div class="code-wrapper">
+                <div class="code-header">main.js (Minified)</div>
+                <pre><code><span class="token-val">function</span> n(e,t){return e+t}const u=n(1,2);console.log(u);if(u>10){throw new Error("x")}</code></pre>
             </div>
 
-            <h2>Source Maps</h2>
-            <p>The better solution is <strong>Source Maps</strong>. When you build your app, ensure your bundler
-                (Webpack/Vite) generates `.map` files. These files map the minified code back to your original source
-                code.</p>
+            <h2 id="prettyprint">2. Level 1: The "Pretty Print" Trick</h2>
+            <p>If you have zero control over the build process (e.g., you are debugging a 3rd party library), Chrome has
+                a built-in feature to format code instantly.</p>
+
+            <h3>How to use it:</h3>
+            <ol>
+                <li>Open <strong>Chrome DevTools</strong> (F12 or Cmd+Option+I).</li>
+                <li>Go to the <strong>Sources</strong> tab.</li>
+                <li>Select the minified file (e.g., <code>main.js</code>).</li>
+                <li>Look at the bottom left of the code viewer for a <strong>{ }</strong> icon.</li>
+                <li>Click it.</li>
+            </ol>
+
+
+
+            <p><strong>What happens?</strong> Chrome will insert whitespace and newlines to make the code readable.
+                However, <strong>variable names will still be mangled</strong>. You will see structured code, but
+                variables will still be named <code>a</code>, <code>b</code>, and <code>n</code>.</p>
+
+            <div class="tool-card">
+                <h3>⚡ Minify Code Safely</h3>
+                <p>Want to reduce file size without breaking your app? Use our safe JS minifier.</p>
+                <a href="https://codeformats.com" class="cta-btn-primary" style="display:inline-block;">
+                    Open JS Minifier
+                </a>
+            </div>
+
+            <h2 id="sourcemaps">3. Level 2: The Magic of Source Maps</h2>
+            <p>The real solution is **Source Maps**. A source map (`.map` file) is a JSON file that acts as a treasure
+                map. It tells the browser: <em>"The code at line 1, column 450 in `main.js` actually corresponds to line
+                    24 in `UserProfile.tsx`."</em></p>
+
+            <p>When Source Maps are enabled:</p>
+            <ul>
+                <li>You see your <strong>original</strong> code in the Sources tab (TS, ES6, Vue).</li>
+                <li>Console errors point to the <strong>original</strong> file and line number.</li>
+                <li>You can set breakpoints in your original source code.</li>
+            </ul>
+
+            <h2 id="config">4. Configuring Webpack, Vite & Next.js</h2>
+            <p>Source maps are often disabled by default in production to save build time. Here is how to enable them
+                for your stack.</p>
+
+            <h3>For Vite (React/Vue)</h3>
+            <div class="code-wrapper">
+                <div class="code-header">vite.config.js</div>
+                <pre><code><span class="token-prop">export default</span> defineConfig({
+  build: {
+    <span class="token-comment">// 'true' creates a separate .map file</span>
+    <span class="token-comment">// 'hidden' creates .map but doesn't reference it (good for Sentry)</span>
+    sourcemap: <span class="token-val">true</span>
+  }
+})</code></pre>
+            </div>
+
+            <h3>For Next.js</h3>
+            <div class="code-wrapper">
+                <div class="code-header">next.config.js</div>
+                <pre><code><span class="token-prop">module.exports</span> = {
+  <span class="token-comment">// Enable source maps in production</span>
+  productionBrowserSourceMaps: <span class="token-val">true</span>,
+}</code></pre>
+            </div>
+
+            <h3>For Webpack (CRA / Custom)</h3>
+            <div class="code-wrapper">
+                <div class="code-header">webpack.config.js</div>
+                <pre><code><span class="token-prop">module.exports</span> = {
+  <span class="token-comment">// Best quality for prod debugging</span>
+  devtool: <span class="token-val">'source-map'</span>, 
+}</code></pre>
+            </div>
+
+            <h2 id="ignore">5. Pro Tip: The "Ignore List" (Blackboxing)</h2>
+            <p>When you are stepping through code with a debugger, nothing is more annoying than stepping <em>into</em>
+                React's internal code or jQuery's library code. You want to debug <strong>your</strong> code, not the
+                framework.</p>
+
+            <p><strong>The Solution:</strong> Chrome's "Ignore List" (formerly Blackboxing).</p>
+            <ol>
+                <li>Open <strong>DevTools Settings</strong> (Gear icon).</li>
+                <li>Go to <strong>Ignore List</strong>.</li>
+                <li>Click <strong>Add Pattern</strong>.</li>
+                <li>Enter <code>/node_modules/|/bower_components/</code>.</li>
+            </ol>
+            <p>Now, when you use "Step Into" (F11), Chrome will skip over all library code and keep you focused on your
+                application logic.</p>
+
+            <h2 id="security">6. Should You Ship Source Maps to Prod?</h2>
+            <p>This is a security debate. If you ship `.map` files publicly:</p>
+            <ul>
+                <li><strong>Pro:</strong> Easy debugging for you.</li>
+                <li><strong>Con:</strong> Anyone can right-click "Inspect" and see your original, unminified source
+                    code. They can copy your logic easily.</li>
+            </ul>
+
+            <div class="callout danger">
+                <i class="fas fa-user-secret"></i>
+                <div class="callout-content">
+                    <h4>Security Warning</h4>
+                    <p>If your code contains sensitive algorithms or proprietary logic, do NOT expose source maps
+                        publicly. Instead, upload them privately to a monitoring service like <strong>Sentry, LogRocket,
+                            or Datadog</strong>.</p>
+                </div>
+            </div>
+
+            <p>By uploading to Sentry, your users download the minified code (fast), but your Sentry dashboard shows you
+                the unminified error trace (readable). This is the industry standard for enterprise applications.</p>
+
+            <h2>Conclusion</h2>
+            <p>Debugging without source maps is like trying to fix a car engine through the tailpipe. It's possible, but
+                painful. Configure your build tools today to generate source maps, learn to use the "Ignore List," and
+                stop fearing production deployments.</p>
+
         </article>
 
-        <div class="related-section">
-            <h3 class="related-title">Read Next</h3>
-            <div class="related-grid">
-                <a href="blog-css-seo.html" class="related-card">
-                    <span class="related-tag">#SEO</span>
-                    <h3>Minification & SEO</h3>
-                    <p>Why speed matters.</p>
-                </a>
-                <a href="blog-html-boilerplate.html" class="related-card">
-                    <span class="related-tag">#Code</span>
-                    <h3>HTML Boilerplate</h3>
-                    <p>Start projects right.</p>
-                </a>
-            </div>
+        <div class="related-grid">
+            <a href="blog-css-minification-seo.html" class="related-card">
+                <h3>Minification & SEO</h3>
+                <p>Does file size actually impact Google rankings?</p>
+            </a>
+            <a href="blog-vscode-tools.html" class="related-card">
+                <h3>Top 5 VS Code Extensions</h3>
+                <p>Boost productivity with these essential tools.</p>
+            </a>
         </div>
-        <footer>&copy; 2025 Code Formats by Udit Sharma.</footer>
+
+        <footer>
+            &copy; 2025 Code Formats. Built by Udit Sharma.
+        </footer>
     </div>
+
+    <div class="sticky-cta">
+        <div class="sticky-text">
+            Need cleaner code? <span>Format JS instantly.</span>
+        </div>
+        <a href="https://codeformats.com" class="cta-btn-primary">
+            Use Free Tools <i class="fas fa-bolt"></i>
+        </a>
+    </div>
+
+    <script>
+        // Progress Bar Logic
+        window.onscroll = function () {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+    </script>
 </body>
 
 </html>

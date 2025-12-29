@@ -3,20 +3,27 @@
 
 <head>
     <meta name="google-site-verification" content="GtqqG0buC54bb3Z8amYt74k_CPQSbTXAT1pk9M_pPt4" />
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://code-formats.vercel.app/">
-    <meta property="og:title" content="Code Formats - Ultimate Developer Toolkit">
-    <meta property="og:description"
-        content="Free Developer Tools: JSON Formatter, Image Optimizer, Smooth Shadows, Mock Data, Social Previews & More.">
-    <meta property="og:image" content="https://code-formats.vercel.app/codeformat.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://code-formats.vercel.app/codeformat.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#09090b">
-    <title>Code Formats - Ultimate Developer Toolkit</title>
+
+    <title>Best Free JSON Formatter, Image Compressor & Online Developer Tools</title>
+
     <meta name="description"
-        content="Format JSON, Prettify HTML/CSS/JS, Minify code, Diff Checker, Color Converter, Mock Data, Shadows.">
+        content="The fastest, most secure online developer toolkit. Validate & Beautify JSON, Compress Images (WebP/JPG) locally, Format SQL, and Minify CSS/JS. No server uploads.">
+
+    <meta name="keywords"
+        content="json formatter online, json validator, image compressor, reduce image size, webp converter, sql beautifier, css minifier, javascript obfuscator, code diff checker, mock data generator, base64 encoder, secure developer tools">
+
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://code-formats.vercel.app/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://code-formats.vercel.app/">
+    <meta property="og:title" content="Code Formats - Secure Developer Toolkit">
+    <meta property="og:description" content="Format JSON, Compress Images & Generate CSS. Fast, Free, and Private.">
+    <meta property="og:image" content="https://code-formats.vercel.app/codeformat.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#09090b">
 
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
@@ -24,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <script src="https://unpkg.com/prettier@3.0.3/standalone.js" defer></script>
@@ -47,6 +54,7 @@
             --bg-sidebar: #121214;
             --bg-pane: #18181b;
             --bg-input: #000000;
+            --bg-drawer: #121214;
             --border: #27272a;
             --primary: #6366f1;
             --primary-hover: #4f46e5;
@@ -70,6 +78,7 @@
             --bg-sidebar: #ffffff;
             --bg-pane: #ffffff;
             --bg-input: #f1f5f9;
+            --bg-drawer: #ffffff;
             --border: #e2e8f0;
             --primary: #4f46e5;
             --primary-glow: rgba(79, 70, 229, 0.15);
@@ -100,7 +109,7 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* Standard Layout */
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -119,6 +128,7 @@
             background: var(--text-muted);
         }
 
+        /* Sidebar & Layout */
         aside {
             width: var(--sidebar-w);
             background: var(--bg-sidebar);
@@ -172,6 +182,7 @@
             border-color: var(--primary);
         }
 
+        /* SEMANTIC NAV */
         .menu {
             flex: 1;
             overflow-y: auto;
@@ -283,6 +294,7 @@
             font-weight: 500;
             font-size: 0.9rem;
             transition: 0.2s;
+            cursor: pointer;
         }
 
         .nav-link:hover {
@@ -375,6 +387,7 @@
         .editor-container {
             flex: 1;
             position: relative;
+            overflow: hidden;
         }
 
         textarea {
@@ -404,12 +417,13 @@
             pointer-events: none;
         }
 
-        /* Overlays for new tools */
         #visualOutput,
         #iframePreview,
         #mockControls,
         #socialControls,
-        #shadowControls {
+        #shadowControls,
+        #imageControls,
+        #imagePreview {
             position: absolute;
             inset: 0;
             background: var(--bg-input);
@@ -425,133 +439,7 @@
             background: #fff;
         }
 
-        /* Syntax Highlighting & Diff */
-        .json-key {
-            color: #d2a8ff;
-        }
-
-        .json-string {
-            color: #a5d6ff;
-        }
-
-        .json-number {
-            color: #ff9f89;
-        }
-
-        .json-boolean {
-            color: #569cd6;
-            font-weight: bold;
-        }
-
-        .light .json-key {
-            color: #a31515;
-        }
-
-        .light .json-string {
-            color: #0451a5;
-        }
-
-        .diff-added {
-            background-color: var(--diff-add);
-            color: var(--diff-add-text);
-            display: block;
-            width: 100%;
-        }
-
-        .diff-removed {
-            background-color: var(--diff-rem);
-            color: var(--diff-rem-text);
-            display: block;
-            width: 100%;
-        }
-
-        pre {
-            font-family: var(--font-code);
-            white-space: pre-wrap;
-            font-size: 13px;
-        }
-
-        /* Styles for New Features (Glass/Shadow/Mock) */
-        .glass-controls,
-        .tool-group {
-            padding: 15px;
-            background: var(--bg-sidebar);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            margin-bottom: 15px;
-        }
-
-        .glass-control-group {
-            margin-bottom: 10px;
-        }
-
-        .glass-control-group label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
-        .glass-slider {
-            width: 100%;
-            -webkit-appearance: none;
-            background: var(--border);
-            height: 4px;
-            border-radius: 2px;
-        }
-
-        .glass-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: var(--primary);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .slider-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .tool-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: var(--text-main);
-        }
-
-        .tool-input {
-            width: 100%;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 8px;
-            border-radius: 4px;
-            font-family: var(--font-code);
-            margin-bottom: 10px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-
-        /* Footer */
+        /* SEMANTIC FOOTER */
         .footer {
             height: 60px;
             background: var(--bg-sidebar);
@@ -691,15 +579,10 @@
                 justify-content: center;
                 width: 100%;
                 padding-top: 10px;
-
             }
 
             .footer-stats {
                 border-top: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            .footer-stats .stat-item:first-child {
-                padding-top: 10px;
             }
 
             header {
@@ -739,6 +622,468 @@
         .toast.error i {
             color: var(--error);
         }
+
+        /* Tools CSS */
+        .json-key {
+            color: #d2a8ff;
+        }
+
+        .json-string {
+            color: #a5d6ff;
+        }
+
+        .json-number {
+            color: #ff9f89;
+        }
+
+        .json-boolean {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .light .json-key {
+            color: #a31515;
+        }
+
+        .light .json-string {
+            color: #0451a5;
+        }
+
+        .diff-added {
+            background-color: var(--diff-add);
+            color: var(--diff-add-text);
+            display: block;
+            width: 100%;
+        }
+
+        .diff-removed {
+            background-color: var(--diff-rem);
+            color: var(--diff-rem-text);
+            display: block;
+            width: 100%;
+        }
+
+        pre {
+            font-family: var(--font-code);
+            white-space: pre-wrap;
+            font-size: 13px;
+        }
+
+        .tool-group {
+            padding: 15px;
+            background: var(--bg-sidebar);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .tool-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .tool-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 4px;
+            font-family: var(--font-code);
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .glass-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            background: var(--border);
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .glass-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            color: var(--primary);
+        }
+
+        .img-preview-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .img-card {
+            background: var(--bg-sidebar);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+
+        .img-card img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .img-placeholder-icon {
+            font-size: 3rem;
+            color: var(--border);
+            margin-bottom: 10px;
+        }
+
+        .img-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .badge-save {
+            background: var(--diff-add) !important;
+            color: var(--diff-add-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* --- PULSE BUTTON & SEO DRAWER STYLES --- */
+        #pulseBtn {
+            position: fixed;
+            bottom: 85px;
+            right: 25px;
+            width: 55px;
+            height: 55px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border: none;
+            transition: transform 0.2s;
+            animation: pulse-glow 2s infinite;
+        }
+
+        #pulseBtn:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+
+        #pulseBtn::after {
+            content: "About & SEO";
+            position: absolute;
+            right: 65px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-sidebar);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            border: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        #pulseBtn:hover::after {
+            opacity: 1;
+        }
+
+        @media(max-width: 900px) {
+            #pulseBtn {
+                bottom: 95px;
+                right: 20px;
+            }
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
+
+        /* SEO Drawer (Semantic ASIDE) */
+        #seoDrawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90vh;
+            background: var(--bg-drawer);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #seoDrawer.open {
+            transform: translateY(0);
+        }
+
+        .drawer-handle-area {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .drawer-handle {
+            width: 60px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        .drawer-close {
+            position: absolute;
+            right: 25px;
+            top: 18px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .drawer-close:hover {
+            color: var(--text-main);
+            background: rgba(125, 125, 125, 0.1);
+            border-radius: 50%;
+        }
+
+        .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Rich SEO Content Styling */
+        .seo-h1 {
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .seo-h1 span {
+            color: var(--primary);
+        }
+
+        .seo-intro {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .seo-h2 {
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin: 40px 0 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .feature-box {
+            background: rgba(125, 125, 125, 0.03);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .feature-box:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .feature-box h3 {
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+        }
+
+        .feature-box i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .feature-box p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Smooth FAQ Accordion */
+        .faq-item {
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(125, 125, 125, 0.02);
+        }
+
+        .faq-item[open] {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        summary {
+            padding: 18px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-main);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        summary:hover {
+            background: rgba(125, 125, 125, 0.05);
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary i {
+            transition: transform 0.3s ease;
+            color: var(--primary);
+        }
+
+        details[open] summary i {
+            transform: rotate(180deg);
+        }
+
+        .faq-content {
+            padding: 0 20px 20px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: var(--border);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
     </style>
 </head>
 
@@ -749,9 +1094,9 @@
         </div>
         <div class="search-container"><input type="text" class="search-input" placeholder="Search tools..."
                 onkeyup="filterTools(this)"></div>
-        <div class="menu" id="menuContainer"></div>
+        <nav class="menu" id="menuContainer"></nav>
     </aside>
-    <div id="overlay" onclick="toggleMobileSidebar()"></div>
+    <div id="overlay" onclick="closeAllDrawers()"></div>
 
     <main>
         <header>
@@ -761,17 +1106,19 @@
                     <p id="toolDesc">Validate, Prettify and Minify JSON data</p>
                 </div>
             </div>
-            <div class="header-right"><a href="blog.html" class="nav-link">Blog</a><button class="theme-btn"
-                    onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button></div>
+            <div class="header-right">
+                <a href="blog.html" class="nav-link">Blog</a>
+                <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
+            </div>
         </header>
 
-        <div class="workspace" id="workspace">
+        <section class="workspace" id="workspace">
             <div class="pane">
                 <div class="pane-header">
-                    <span class="pane-title">Input / Controls</span>
-                    <div class="pane-actions"><i class="far fa-clipboard action-icon" onclick="pasteInput()"
-                            title="Paste"></i><i class="far fa-trash-alt action-icon" onclick="clearAll()"
-                            title="Clear"></i></div>
+                    <span class="pane-title" id="paneInputTitle">Input / Controls</span>
+                    <div class="pane-actions" id="inputActions"><i class="far fa-clipboard action-icon"
+                            onclick="pasteInput()" title="Paste"></i><i class="far fa-trash-alt action-icon"
+                            onclick="clearAll()" title="Clear"></i></div>
                 </div>
                 <div class="editor-container">
                     <textarea id="input" placeholder=""></textarea>
@@ -791,6 +1138,31 @@
                         </div>
                         <button class="btn btn-pri" onclick="generateMockData()"
                             style="width:100%; justify-content:center;">Generate JSON</button>
+                    </div>
+
+                    <div id="imageControls">
+                        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                            <p>Click or Drag Image Here</p>
+                            <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" hidden
+                                onchange="handleImageUpload(this)">
+                        </div>
+                        <div class="tool-group">
+                            <div class="tool-title">Compression Settings</div>
+                            <div class="slider-row"><span>Quality</span><span id="valQuality">80%</span></div>
+                            <input type="range" class="glass-slider" min="0.1" max="1" step="0.05" value="0.8"
+                                id="rngQuality" oninput="processImage()">
+                            <div class="slider-row" style="margin-top:10px;"><span>Max Width</span><span
+                                    id="valWidth">Original</span></div>
+                            <input type="number" class="tool-input" id="numWidth"
+                                placeholder="e.g. 1920 (Leave empty for original)" oninput="processImage()">
+                            <div class="slider-row" style="margin-top:10px;"><span>Output Format</span></div>
+                            <select id="selFormat" class="tool-input" onchange="processImage()">
+                                <option value="image/webp">WebP (Best Compression)</option>
+                                <option value="image/jpeg">JPEG</option>
+                                <option value="image/png">PNG</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div id="socialControls">
@@ -834,7 +1206,7 @@
 
             <div class="pane">
                 <div class="pane-header">
-                    <span class="pane-title">Output</span>
+                    <span class="pane-title" id="paneOutputTitle">Output</span>
                     <div class="pane-actions">
                         <div id="viewToggles"
                             style="display:none; gap:10px; margin-right:10px; font-size:0.8rem; align-items:center;">
@@ -852,26 +1224,153 @@
                 <div class="editor-container">
                     <textarea id="output" readonly placeholder="Result will appear here..."></textarea>
                     <div id="visualOutput"></div>
+                    <div id="imagePreview">
+                        <div class="img-preview-container">
+                            <div class="img-card">
+                                <div class="tool-title">Original</div>
+                                <i id="iconOriginal" class="fas fa-image img-placeholder-icon"></i>
+                                <img id="imgOriginal" src="" alt="Original">
+                                <div class="img-meta" id="metaOriginal">Waiting for image...</div>
+                            </div>
+                            <div style="font-size:1.5rem; color:var(--text-muted);"><i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="img-card" style="border-color:var(--primary);">
+                                <div class="tool-title" style="color:var(--primary)">Compressed / Converted</div>
+                                <i id="iconCompressed" class="fas fa-bolt img-placeholder-icon"
+                                    style="color:var(--primary)"></i>
+                                <img id="imgCompressed" src="" alt="Compressed">
+                                <div class="img-meta">
+                                    <span id="metaCompressed">-</span>
+                                    <span id="badgeSaved" class="badge-save">0% Saved</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-pri" onclick="downloadImage()"
+                                style="margin:0 auto; width: fit-content;">
+                                <i class="fas fa-download"></i> Download Image
+                            </button>
+                        </div>
+                    </div>
                     <iframe id="iframePreview" sandbox="allow-scripts"></iframe>
                     <div class="editor-stats" id="outputStats" style="display:none;">0 KB</div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="footer">
+        <footer class="footer">
             <div class="footer-stats">
                 <div class="stat-item" id="footerStatus"><i class="fas fa-circle-notch"></i> Ready</div>
                 <div class="stat-item" id="savingsStat" style="display:none;"><i class="fas fa-arrow-down"></i> <span
                         id="savingsText"></span> <span class="diff-tag" id="savingsBadge"></span></div>
-                <div class="footer-links"><a href="About.html">About</a> • <a href="Privacy.html">Privacy</a> • <a
-                        href="Contact.html">Contact</a>
+                <div class="footer-links">
+                    <a href="About.html">About</a> •
+                    <a href="Privacy.html">Privacy</a> •
+                    <a href="Contact.html">Contact</a>
                 </div>
             </div>
             <div class="footer-actions"><button class="btn btn-sec" id="btnSecondary"
                     onclick="runAction('secondary')">MINIFY</button><button class="btn btn-pri" id="btnPrimary"
                     onclick="runAction('primary')"><i class="fas fa-play"></i> RUN</button></div>
-        </div>
+        </footer>
     </main>
+
+    <button id="pulseBtn" onclick="toggleSeoDrawer()" title="Learn More">
+        <i class="fas fa-book-open"></i>
+    </button>
+
+    <aside id="seoDrawer">
+        <div class="drawer-handle-area" onclick="toggleSeoDrawer()">
+            <div class="drawer-handle"></div>
+            <div class="drawer-close" onclick="toggleSeoDrawer()">&times;</div>
+        </div>
+        <div class="drawer-content">
+            <article class="seo-article">
+                <h1 class="seo-h1">Best Online <span>JSON Formatter</span>, Image Compressor & Developer Tools</h1>
+
+                <p class="seo-intro">
+                    Code Formats is the ultimate, privacy-first developer workspace. Validate, beautify, and minify your
+                    code instantly. Compress images without server uploads. Every tool runs 100% in your browser for
+                    maximum speed and security.
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <h3><i class="fas fa-code"></i> JSON Formatter & Validator</h3>
+                        <p>The best free online JSON tool. Prettify messy JSON, fix syntax errors, and minify for
+                            production. Use our interactive tree view to debug complex API responses.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3><i class="fas fa-image"></i> Lossless Image Compressor</h3>
+                        <p>Reduce file size of PNG, JPG, and WebP images by up to 90% without quality loss. Convert
+                            images to modern WebP format instantly in your browser.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3><i class="fas fa-database"></i> SQL & Code Beautifiers</h3>
+                        <p>Format SQL queries, XML data, CSS, and HTML. Our intelligent beautifiers fix indentation and
+                            make your code readable and clean.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h3><i class="fas fa-lock"></i> 100% Client-Side Privacy</h3>
+                        <p>Your data never leaves your device. Unlike other tools, we process everything locally using
+                            JavaScript. Safe for sensitive data like JWTs and API keys.</p>
+                    </div>
+                </div>
+
+                <h2 class="seo-h2">Frequently Asked Questions (FAQ)</h2>
+
+                <details class="faq-item">
+                    <summary>How to format JSON online? <i class="fas fa-chevron-down"></i></summary>
+                    <div class="faq-content">Simply paste your JSON string into the input editor and click "RUN". Our
+                        tool will automatically validate syntax and beautify the output with proper indentation.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>Is this Image Compressor safe? <i class="fas fa-chevron-down"></i></summary>
+                    <div class="faq-content">Yes, it is 100% safe. We use advanced HTML5 Canvas technology to compress
+                        images locally in your browser. Your photos are never uploaded to any server.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>Can I convert JPG to WebP? <i class="fas fa-chevron-down"></i></summary>
+                    <div class="faq-content">Absolutely. Select the "Image Tools" category, upload your JPG or PNG, and
+                        choose "WebP" as the output format. WebP offers superior compression for faster websites.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>What utilities are included? <i class="fas fa-chevron-down"></i></summary>
+                    <div class="faq-content">
+                        Code Formats includes a wide range of free tools:
+                        <div class="tag-cloud">
+                            <span class="tag">JSON Minifier</span>
+                            <span class="tag">SQL Beautifier</span>
+                            <span class="tag">Diff Checker</span>
+                            <span class="tag">Base64 Encoder</span>
+                            <span class="tag">URL Decoder</span>
+                            <span class="tag">CSS Minifier</span>
+                            <span class="tag">Mock Data Gen</span>
+                            <span class="tag">QR Code Generator</span>
+                        </div>
+                    </div>
+                </details>
+
+                <h2 class="seo-h2">Why Developers Choose Code Formats?</h2>
+                <div style="color:var(--text-muted); line-height:1.8;">
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Speed:</strong> Instant processing with no server lag.</li>
+                        <li><strong>Offline Mode:</strong> Works even without an internet connection once loaded.</li>
+                        <li><strong>All-in-One:</strong> Switch between formatting JSON, minifying CSS, and generating
+                            UUIDs in one tab.</li>
+                        <li><strong>User Experience:</strong> Dark mode support, copy-paste shortcuts, and a clean,
+                            ad-free interface.</li>
+                    </ul>
+                </div>
+
+                <p
+                    style="margin-top:50px; text-align:center; font-size:0.8rem; color:var(--text-muted); padding-bottom: 20px;">
+                    © 2025 Code Formats. Built for the developer community.
+                </p>
+            </article>
+        </div>
+    </aside>
 
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span>Action Completed</span></div>
 
@@ -879,6 +1378,7 @@
         // --- 1. INITIALIZATION & STATE ---
         const tools = [
             { category: "JSON Tools", items: [{ id: "json-fmt", icon: "fas fa-code", name: "JSON Formatter", desc: "Validate, Prettify & Tree View" }, { id: "json-min", icon: "fas fa-compress", name: "JSON Minifier", desc: "Compress JSON data" }, { id: "json-csv", icon: "fas fa-table", name: "JSON to CSV", desc: "Convert JSON array to CSV" }, { id: "mock-data", icon: "fas fa-users", name: "Mock Data Gen", desc: "Fake Users JSON" }] },
+            { category: "Image Tools", items: [{ id: "img-compress", icon: "fas fa-image", name: "Image Minifier & Converter", desc: "Compress & Convert (WebP, JPG, PNG)" }] },
             { category: "Design / UI", items: [{ id: "shadow-gen", icon: "fas fa-layer-group", name: "Smooth Shadow", desc: "Layered Shadows" }, { id: "glass-morphism", icon: "fas fa-wind", name: "Glassmorphism Gen", desc: "Generate Glass CSS" }, { id: "color-conv", icon: "fas fa-palette", name: "Color Converter", desc: "HEX, RGB, HSL conversion" }, { id: "aspect-ratio", icon: "fas fa-expand", name: "Aspect Ratio", desc: "Calc Ratio & Padding" }] },
             { category: "Media / Creator", items: [{ id: "social-card", icon: "fas fa-share-alt", name: "Social Preview", desc: "Twitter/Link Cards" }] },
             { category: "Dev Tools", items: [{ id: "diff-check", icon: "fas fa-exchange-alt", name: "Diff Checker", desc: "Compare Text/Code" }, { id: "jwt-dec", icon: "fas fa-shield-alt", name: "JWT Decoder", desc: "Decode Header & Payload" }, { id: "px-rem", icon: "fas fa-ruler-combined", name: "PX to REM", desc: "Convert Pixels to REM units" }, { id: "case-conv", icon: "fas fa-text-height", name: "Case Converter", desc: "Camel, Snake, Kebab formats" }] },
@@ -889,6 +1389,7 @@
         ];
 
         let currentId = "json-fmt"; let isRemToPxMode = false; let debounceTimer; const DIFF_SPLIT = "\n======\n";
+        let originalImageBlob = null; let compressedImageUrl = null;
 
         const els = {
             input: document.getElementById('input'), output: document.getElementById('output'), menu: document.getElementById('menuContainer'),
@@ -896,8 +1397,12 @@
             frame: document.getElementById('iframePreview'), inputStats: document.getElementById('inputStats'), outputStats: document.getElementById('outputStats'),
             savingsStat: document.getElementById('savingsStat'), btnPri: document.getElementById('btnPrimary'), btnSec: document.getElementById('btnSecondary'),
             viewToggles: document.getElementById('viewToggles'), sidebar: document.getElementById('sidebar'), overlay: document.getElementById('overlay'),
+            inputActions: document.getElementById('inputActions'), paneInputTitle: document.getElementById('paneInputTitle'), paneOutputTitle: document.getElementById('paneOutputTitle'),
             // New Controls
-            mockControls: document.getElementById('mockControls'), socialControls: document.getElementById('socialControls'), shadowControls: document.getElementById('shadowControls')
+            mockControls: document.getElementById('mockControls'), socialControls: document.getElementById('socialControls'),
+            shadowControls: document.getElementById('shadowControls'), imageControls: document.getElementById('imageControls'), imagePreview: document.getElementById('imagePreview'),
+            // SEO Drawer
+            seoDrawer: document.getElementById('seoDrawer')
         };
 
         document.addEventListener('DOMContentLoaded', () => { loadTheme(); renderSidebar(); selectTool('json-fmt'); setupEventListeners(); startTypingAnimation(); });
@@ -921,7 +1426,16 @@
             els.input.addEventListener('keydown', function (e) {
                 if (e.key == 'Tab') { e.preventDefault(); const start = this.selectionStart; const end = this.selectionEnd; this.value = this.value.substring(0, start) + "\t" + this.value.substring(end); this.selectionStart = this.selectionEnd = start + 1; }
             });
-            window.addEventListener('resize', () => { if (window.innerWidth > 900) { els.overlay.classList.remove('show'); els.sidebar.classList.remove('open'); } });
+            window.addEventListener('resize', () => { if (window.innerWidth > 900) { els.overlay.classList.remove('show'); els.sidebar.classList.remove('open'); els.seoDrawer.classList.remove('open'); } });
+
+            // Drag and Drop for Images
+            const dz = document.getElementById('dropZone');
+            dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+            dz.addEventListener('dragleave', e => { e.preventDefault(); dz.classList.remove('dragover'); });
+            dz.addEventListener('drop', e => {
+                e.preventDefault(); dz.classList.remove('dragover');
+                if (e.dataTransfer.files.length) { document.getElementById('fileInput').files = e.dataTransfer.files; handleImageUpload(document.getElementById('fileInput')); }
+            });
         }
 
         function loadTheme() { const saved = localStorage.getItem('theme') || 'dark'; document.documentElement.className = saved; updateThemeIcon(saved); }
@@ -936,21 +1450,40 @@
             els.title.innerText = tool.name; els.desc.innerText = tool.desc;
 
             // Reset UI
-            [els.mockControls, els.socialControls, els.shadowControls].forEach(el => el.style.display = 'none');
+            [els.mockControls, els.socialControls, els.shadowControls, els.imageControls, els.imagePreview].forEach(el => el.style.display = 'none');
             els.input.style.display = 'block'; els.visual.style.display = 'none'; els.frame.style.display = 'none'; els.output.style.display = 'block';
-            els.btnPri.style.display = 'flex'; els.btnSec.style.display = 'none';
+            els.btnPri.style.display = 'flex'; els.btnSec.style.display = 'none'; els.inputActions.style.display = 'flex';
             els.viewToggles.style.display = (['json-fmt', 'html-view', 'excel-html', 'jwt-dec', 'glass-morphism', 'social-card'].includes(id)) ? 'flex' : 'none';
             els.outputStats.style.display = 'none'; els.savingsStat.style.display = 'none';
             updateStats("", 'input');
             els.btnSec.style.display = 'flex'; els.btnSec.innerText = 'MINIFY'; els.btnPri.innerHTML = '<i class="fas fa-play"></i> RUN / FORMAT';
             els.input.placeholder = "Paste your code here..."; els.input.disabled = false;
+            els.paneInputTitle.innerText = "Input / Controls"; els.paneOutputTitle.innerText = "Output";
 
             // Logic Switches
-            if (['qr-gen', 'lorem', 'hash-gen', 'base64', 'url-enc', 'csv-json', 'case-conv', 'jwt-dec', 'color-conv', 'glass-morphism', 'aspect-ratio', 'mock-data', 'social-card', 'shadow-gen'].includes(id)) els.btnSec.style.display = 'none';
+            if (['qr-gen', 'lorem', 'hash-gen', 'base64', 'url-enc', 'csv-json', 'case-conv', 'jwt-dec', 'color-conv', 'glass-morphism', 'aspect-ratio', 'mock-data', 'social-card', 'shadow-gen', 'img-compress'].includes(id)) els.btnSec.style.display = 'none';
 
             if (id === 'mock-data') { els.input.style.display = 'none'; els.mockControls.style.display = 'block'; els.btnPri.style.display = 'none'; }
             else if (id === 'social-card') { els.input.style.display = 'none'; els.socialControls.style.display = 'block'; els.btnPri.style.display = 'none'; }
             else if (id === 'shadow-gen') { els.input.style.display = 'none'; els.shadowControls.style.display = 'block'; els.btnPri.style.display = 'none'; updateShadow(); }
+
+            // Image Tool Setup
+            else if (id === 'img-compress') {
+                els.input.style.display = 'none'; els.output.style.display = 'none';
+                els.imageControls.style.display = 'block'; els.imagePreview.style.display = 'block';
+                els.btnPri.style.display = 'none'; els.inputActions.style.display = 'none';
+                els.paneInputTitle.innerText = "Upload & Settings"; els.paneOutputTitle.innerText = "Preview & Download";
+
+                // Reset Image Preview UI on Tool Switch
+                document.getElementById('imgOriginal').style.display = 'none';
+                document.getElementById('iconOriginal').style.display = 'block';
+                document.getElementById('metaOriginal').innerText = "Waiting for image...";
+                document.getElementById('imgCompressed').style.display = 'none';
+                document.getElementById('iconCompressed').style.display = 'block';
+                document.getElementById('metaCompressed').innerText = "-";
+                document.getElementById('badgeSaved').innerText = "0% Saved";
+                document.getElementById('badgeSaved').style.background = 'var(--text-muted)';
+            }
 
             else if (id === 'glass-morphism') { els.input.disabled = true; els.input.placeholder = "Use Visual Pane"; renderGlassGenerator(); switchView('visual'); }
             else if (id === 'aspect-ratio') { els.input.placeholder = "Enter Width Height (e.g. 1920 1080)"; }
@@ -962,7 +1495,79 @@
             if (window.innerWidth <= 900) toggleMobileSidebar();
         }
 
-        // --- NEW FEATURES LOGIC ---
+        // --- IMAGE TOOLS LOGIC ---
+        function handleImageUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+            originalImageBlob = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.getElementById('imgOriginal');
+                img.src = e.target.result;
+                img.style.display = 'block'; // Show Image
+                document.getElementById('iconOriginal').style.display = 'none'; // Hide Icon
+                document.getElementById('metaOriginal').innerText = `${file.type} | ${(file.size / 1024).toFixed(1)} KB`;
+                processImage();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function processImage() {
+            if (!originalImageBlob) return;
+            const quality = parseFloat(document.getElementById('rngQuality').value);
+            document.getElementById('valQuality').innerText = Math.round(quality * 100) + '%';
+
+            const format = document.getElementById('selFormat').value;
+            const maxWidth = document.getElementById('numWidth').value ? parseInt(document.getElementById('numWidth').value) : 0;
+
+            const img = new Image();
+            img.src = document.getElementById('imgOriginal').src;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let w = img.width; let h = img.height;
+
+                if (maxWidth > 0 && w > maxWidth) {
+                    const ratio = maxWidth / w;
+                    w = maxWidth; h = h * ratio;
+                }
+
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+
+                compressedImageUrl = canvas.toDataURL(format, quality);
+
+                const imgComp = document.getElementById('imgCompressed');
+                imgComp.src = compressedImageUrl;
+                imgComp.style.display = 'block'; // Show Image
+                document.getElementById('iconCompressed').style.display = 'none'; // Hide Icon
+
+                // Calculate size approx (Base64 length * 0.75)
+                const head = `data:${format};base64,`;
+                const sizeInBytes = Math.round((compressedImageUrl.length - head.length) * 0.75);
+                const sizeKB = (sizeInBytes / 1024).toFixed(1);
+                const originalKB = (originalImageBlob.size / 1024).toFixed(1);
+
+                const saved = ((1 - (sizeInBytes / originalImageBlob.size)) * 100).toFixed(0);
+
+                document.getElementById('metaCompressed').innerText = `${format.split('/')[1].toUpperCase()} | ${sizeKB} KB`;
+                const badge = document.getElementById('badgeSaved');
+                badge.innerText = `${saved > 0 ? saved : 0}% Saved`;
+                badge.style.background = saved > 0 ? 'var(--diff-add)' : 'var(--text-muted)';
+            };
+        }
+
+        function downloadImage() {
+            if (!compressedImageUrl) return;
+            const a = document.createElement('a');
+            const ext = document.getElementById('selFormat').value.split('/')[1];
+            a.href = compressedImageUrl;
+            a.download = `minified_image.${ext}`;
+            a.click();
+            showToast("Image Downloaded");
+        }
+
+        // --- EXISTING FEATURES LOGIC ---
         function generateMockData() {
             const rows = parseInt(document.getElementById('mockRows').value);
             const data = []; const names = ["Alice", "Bob", "Charlie", "Dave", "Eve"]; const roles = ["Admin", "User", "Editor"];
@@ -1012,7 +1617,7 @@
         }
 
         function renderGlassGenerator() {
-            els.visual.innerHTML = `<div style="height:100%; display:flex; flex-direction:column; gap:20px;"><div id="glassPreviewBg" style="flex:1; background: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80') center/cover; border-radius:8px; display:flex; justify-content:center; align-items:center;"><div id="glassCard" style="width:200px; height:120px; color:#fff; display:flex; justify-content:center; align-items:center; border:1px solid rgba(255,255,255,0.3); border-radius:12px;">Glass Card</div></div><div class="glass-controls"><div class="glass-control-group"><label>Blur: <span id="valBlur">10px</span></label><input type="range" class="glass-slider" min="0" max="40" value="10" oninput="updateGlass()" id="rngBlur"></div><div class="glass-control-group"><label>Transparency: <span id="valTrans">0.2</span></label><input type="range" class="glass-slider" min="0" max="1" step="0.05" value="0.2" oninput="updateGlass()" id="rngTrans"></div><div class="glass-control-group"><label>Color (White -> Black)</label><input type="range" class="glass-slider" min="0" max="255" value="255" oninput="updateGlass()" id="rngColor"></div></div><pre id="glassCode" style="background:var(--bg-input); padding:10px; border-radius:6px; font-size:12px; height:auto; overflow:auto;"></pre></div>`;
+            els.visual.innerHTML = `<div style="height:100%; display:flex; flex-direction:column; gap:20px;"><div id="glassPreviewBg" style="flex:1; background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%); border-radius:8px; display:flex; justify-content:center; align-items:center;"><div id="glassCard" style="width:200px; height:120px; color:#fff; display:flex; justify-content:center; align-items:center; border:1px solid rgba(255,255,255,0.3); border-radius:12px;">Glass Card</div></div><div class="glass-controls"><div class="glass-control-group"><label>Blur: <span id="valBlur">10px</span></label><input type="range" class="glass-slider" min="0" max="40" value="10" oninput="updateGlass()" id="rngBlur"></div><div class="glass-control-group"><label>Transparency: <span id="valTrans">0.2</span></label><input type="range" class="glass-slider" min="0" max="1" step="0.05" value="0.2" oninput="updateGlass()" id="rngTrans"></div><div class="glass-control-group"><label>Color (White -> Black)</label><input type="range" class="glass-slider" min="0" max="255" value="255" oninput="updateGlass()" id="rngColor"></div></div><pre id="glassCode" style="background:var(--bg-input); padding:10px; border-radius:6px; font-size:12px; height:auto; overflow:auto;"></pre></div>`;
             els.visual.style.display = 'block'; updateGlass();
         }
         function updateGlass() {

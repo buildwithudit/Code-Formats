@@ -4,265 +4,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3 Ways Developers Can Build Passive Income in 2025</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap">
+
+    <title>3 Ways Developers Can Build Passive Income in 2025: A Practical Guide</title>
+    <meta name="description"
+        content="Stop trading time for money. A tactical guide for developers to build assets like UI Kits, Micro-SaaS tools, and Technical Blogs that generate recurring revenue.">
+    <meta name="keywords"
+        content="passive income for developers, sell react templates, micro saas ideas 2025, technical blogging for money, gumroad for developers, indie hacker roadmap, monetization strategies for coders">
+    <meta name="author" content="Udit Sharma">
+    <link rel="canonical" href="https://codeformats.com/blog-passive-income">
+
+    <meta property="og:title" content="3 Ways Developers Can Build Passive Income in 2025">
+    <meta property="og:description"
+        content="Turn your code into assets. The roadmap to escaping the hourly billing trap.">
+    <meta property="og:type" content="article">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-body: #050505;
-            --bg-glass: rgba(20, 20, 23, 0.6);
-            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-body: #09090b;
+            --bg-card: rgba(24, 24, 27, 0.6);
+            --bg-code: #121214;
             --border: #27272a;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --border-highlight: #3f3f46;
+
+            --primary: #818cf8;
+            --primary-glow: rgba(129, 140, 248, 0.15);
+            --secondary: #10b981;
+            --danger: #f87171;
+            --warning: #fbbf24;
+
             --text-main: #e4e4e7;
             --text-muted: #a1a1aa;
-            --font-ui: 'Inter';
-            --font-code: 'JetBrains Mono';
+            --text-dim: #71717a;
+
+            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        /* --- GLOBAL RESET & LAYOUT --- */
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-body);
-            background-image: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.08), transparent 40%);
+            background-color: var(--bg-body);
+            /* Technical Grid Background */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+
             color: var(--text-main);
             font-family: var(--font-ui);
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
+        /* SCROLL PROGRESS BAR */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--primary);
+            width: 0%;
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* MAIN WRAPPER */
         .wrapper {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px 120px 20px;
+            position: relative;
         }
 
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 15px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        .nav-back:hover {
-            color: #fff;
-            transform: translateX(-2px);
-        }
-
-        article h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 8px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .meta-info {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-bottom: 25px;
+        /* --- NAVIGATION --- */
+        .nav-header {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             border-bottom: 1px solid var(--border);
             padding-bottom: 15px;
         }
 
-        .meta-info i {
+        .nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: #fff;
+        }
+
+        .brand-logo {
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        article h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin: 0 0 15px 0;
+            background: linear-gradient(180deg, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: var(--font-code);
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .meta-row span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-row i {
             color: var(--primary);
-            font-size: 0.75rem;
         }
 
         article p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #d4d4d8;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         article h2 {
-            font-size: 1.4rem;
-            margin-top: 30px;
-            margin-bottom: 10px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        article h2::before {
+            content: '#';
+            color: var(--primary);
+            opacity: 0.4;
+            margin-right: 8px;
+        }
+
+        article h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+
+        strong {
             color: #fff;
             font-weight: 700;
         }
 
-        .cta-box {
-            background: rgba(99, 102, 241, 0.05);
-            border: 1px dashed var(--border);
-            border-left: 3px solid var(--primary);
-            padding: 20px;
+        ul,
+        ol {
+            margin-bottom: 24px;
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* --- COMPONENTS --- */
+
+        /* TOC */
+        .toc {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            margin: 30px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .cta-box h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: #fff;
-        }
-
-        .cta-box p {
-            margin: 0;
+            padding: 20px;
+            margin-bottom: 50px;
             font-size: 0.9rem;
         }
 
-        .cta-btn {
-            align-self: start;
-            background: var(--primary);
-            color: #fff;
-            padding: 8px 20px;
-            border-radius: 6px;
-            text-decoration: none;
+        .toc summary {
+            cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
-            transition: 0.2s;
-            margin-top: 5px;
+            color: var(--text-muted);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .cta-btn:hover {
-            background: #4f46e5;
-        }
-
-        .related-section {
-            margin-top: 50px;
-            border-top: 1px solid var(--border);
-            padding-top: 30px;
-        }
-
-        .related-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+        .toc summary:hover {
             color: #fff;
         }
 
+        .toc ul {
+            margin: 15px 0 0 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 8px;
+        }
+
+        .toc a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+            display: block;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        /* CALLOUTS */
+        .callout {
+            background: rgba(129, 140, 248, 0.05);
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .callout i {
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .callout h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .callout p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .callout.danger {
+            background: rgba(248, 113, 113, 0.05);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+
+        .callout.danger i {
+            color: var(--danger);
+        }
+
+        /* --- CTAs --- */
+        .sticky-cta {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-highlight);
+            padding: 10px 10px 10px 25px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2s backwards;
+        }
+
+        .sticky-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .sticky-text span {
+            color: var(--text-dim);
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, var(--primary), #6366f1);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .cta-btn-primary:hover {
+            transform: scale(1.05);
+        }
+
+        /* INLINE TOOL CARD */
+        .tool-card {
+            background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.4) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.25;
+            z-index: -1;
+        }
+
+        .tool-card h3 {
+            margin: 0 0 15px 0;
+            color: #fff;
+            font-size: 1.4rem;
+        }
+
+        .tool-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translate(-50%, 100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* --- RELATED SECTION --- */
         .related-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
         }
 
         .related-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 25px;
             text-decoration: none;
-            transition: 0.2s;
-            display: block;
+            transition: all 0.2s;
         }
 
         .related-card:hover {
             border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .related-tag {
-            font-size: 0.65rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 5px;
-            display: block;
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .related-card h3 {
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
             color: #fff;
-            margin: 0 0 5px 0;
-            line-height: 1.4;
         }
 
         .related-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: var(--text-dim);
             margin: 0;
-            line-height: 1.4;
         }
 
+        /* --- FOOTER --- */
         footer {
-            margin-top: 40px;
+            margin-top: 80px;
             text-align: center;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--text-dim);
             border-top: 1px solid var(--border);
-            padding-top: 20px;
-            font-size: 0.8rem;
+            padding: 40px 0;
         }
 
         @media(max-width: 600px) {
+            .wrapper {
+                padding: 20px 15px 100px 15px;
+            }
+
+            article h1 {
+                font-size: 2rem;
+            }
+
             .related-grid {
                 grid-template-columns: 1fr;
             }
 
-            article h1 {
-                font-size: 1.6rem;
+            .sticky-text {
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <div class="wrapper">
-        <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        <nav class="nav-header">
+            <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> All Articles</a>
+            <div class="brand-logo">Code Formats</div>
+        </nav>
+
         <article>
-            <h1>3 Ways Developers Can Build Passive Income in 2025</h1>
-            <div class="meta-info">
-                <span><i class="far fa-user"></i> Udit Sharma</span>
-                <span><i class="far fa-clock"></i> 6 Min Read</span>
+            <h1>3 Ways Developers Can Build Passive Income in 2025: A Practical Guide</h1>
+
+            <div class="meta-row">
+                <span><i class="far fa-user-circle"></i> Udit Sharma</span>
+                <span><i class="far fa-calendar-alt"></i> Jan 29, 2025</span>
+                <span><i class="far fa-clock"></i> 15 Min Read</span>
             </div>
 
-            <p>We developers have a superpower: we can create assets from thin air. While others have to buy real estate
-                to earn passive income, we just need a code editor. Here is how I plan to monetize my skills.</p>
+            <details class="toc" open>
+                <summary>Table of Contents</summary>
+                <ul>
+                    <li><a href="#intro">The Hourly Trap</a></li>
+                    <li><a href="#templates">1. The "Component Economy" (UI Kits)</a></li>
+                    <li><a href="#micro-saas">2. Micro-SaaS: Solve Small Problems</a></li>
+                    <li><a href="#content">3. Technical Content (SEO Strategy)</a></li>
+                    <li><a href="#roadmap">4. The "Zero to $1k/mo" Roadmap</a></li>
+                </ul>
+            </details>
 
-            <h2>1. Sell UI Templates</h2>
-            <p>If you are good at Tailwind or React, stop building projects that sit in your GitHub "Graveyard." Polish
-                them and put them on <strong>ThemeForest</strong> or <strong>Gumroad</strong>.</p>
-            <p>A simple "Admin Dashboard Template" can sell for $20. If 100 people buy it, that's $2000 for work you did
-                once.</p>
+            <p id="intro">We developers have a superpower that doctors and lawyers don't have: <strong>We can create
+                    assets from thin air.</strong></p>
 
-            <h2>2. Build Micro-Tools</h2>
-            <p>I built <strong>Code Formats</strong> because I needed it. Now, it generates traffic. By adding ads or
-                affiliate links to hosting platforms, a free tool becomes a revenue stream.</p>
+            <p>A doctor has to show up at the hospital to earn money. A lawyer has to be in court. But a developer can
+                write code <em>once</em>, deploy it, and have it work for them 24/7 for the next 10 years. This is
+                <strong>Code Leverage</strong>.</p>
 
-            <div class="cta-box">
-                <h3>Start building today</h3>
-                <p>Clean code helps you ship faster. Use our tools to debug your side-projects.</p>
-                <a href="index.html" class="cta-btn">Go to Tools</a>
+            <p>Yet, most of us are stuck in the "Hourly Trap"—trading time for money as employees or freelancers. In
+                this guide, I will show you the three most reliable paths to building recurring revenue as a coder in
+                2025.</p>
+
+            <h2 id="templates">1. The "Component Economy" (UI Kits & Templates)</h2>
+            <p>If you are good at React, Tailwind, or Vue, you are sitting on a goldmine. The market for high-quality,
+                copy-paste components is exploding.</p>
+
+            <h3>Why This Works</h3>
+            <p>Companies don't want to pay a senior dev $100/hr to build a Dashboard or a Landing Page from scratch.
+                They would rather pay $49 for a premium template that looks good instantly.</p>
+
+            <h3>What to Build?</h3>
+            <ul>
+                <li><strong>Niche Dashboards:</strong> Don't just make a "Admin Panel." Make a "Shopify Analytics
+                    Dashboard" or a "SaaS User Management Panel."</li>
+                <li><strong>Landing Page Kits:</strong> High-conversion blocks (Pricing tables, Testimonials, Hero
+                    sections) for startups.</li>
+                <li><strong>CMS Themes:</strong> Ghost themes, Framer templates, or Notion templates.</li>
+            </ul>
+
+            <div class="callout">
+                <i class="fas fa-lightbulb"></i>
+                <div class="callout-content">
+                    <h4>Where to Sell</h4>
+                    <p>Don't build your own site yet. Use marketplaces like <strong>UI8, ThemeForest, Gumroad, or
+                            LemonSqueezy</strong>. They bring the traffic; you bring the product.</p>
+                </div>
             </div>
 
-            <h2>3. Technical Blogging</h2>
-            <p>Write about the errors you fixed today. Developers are always searching for solutions. Once you have
-                traffic, you can sell e-books or courses.</p>
+            <h2 id="micro-saas">2. Micro-SaaS: Solve Small, Boring Problems</h2>
+            <p>Stop trying to build the next Facebook. The probability of failure is 99.9%. Instead, build a
+                "Micro-SaaS" that solves one specific problem for one specific person.</p>
+
+            <h3>Example: Code Formats</h3>
+            <p>I built <strong>Code Formats</strong> (this site) because I was tired of searching for "JSON Formatter"
+                and getting sites full of ads. I built a clean, fast version. Now, it generates traffic.</p>
+
+            <h3>Ideas for 2025</h3>
+            <ul>
+                <li><strong>Image API:</strong> A service that auto-generates Open Graph images for blog posts.</li>
+                <li><strong>PDF Converter:</strong> A tool specific to a niche (e.g., "Invoice to Excel converter for
+                    Accountants").</li>
+                <li><strong>Notion Widgets:</strong> Simple embedded weather or calendar widgets for Notion users.</li>
+            </ul>
+
+            <div class="tool-card">
+                <h3>⚡ Start Your Micro-SaaS</h3>
+                <p>Don't waste time on setup. Use our HTML5 Boilerplate to launch your MVP in minutes, optimized for
+                    SEO.</p>
+                <a href="blog-html5-boilerplate.html" class="cta-btn-primary" style="display:inline-block;">
+                    Get Boilerplate
+                </a>
+            </div>
+
+            <h2 id="content">3. Technical Content (SEO as an Asset)</h2>
+            <p>Technical writing is not just "blogging"; it is building a distribution channel. Every article you write
+                is a "soldier" that works for you forever.</p>
+
+            <h3>The "Problem-Solution" Strategy</h3>
+            <p>Don't write "My thoughts on AI." Write solutions to errors. Developers search for errors.</p>
+            <ul>
+                <li><em>"How to fix React Hydration Error"</em></li>
+                <li><em>"Unexpected token in JSON at position 0"</em></li>
+                <li><em>"Centering a div with Flexbox"</em></li>
+            </ul>
+
+            <h3>How to Monetize?</h3>
+            <p>Once you have traffic (developers coming to fix errors), you can:</p>
+            <ol>
+                <li><strong>Affiliate Marketing:</strong> Recommend hosting (Vercel, DigitalOcean), tools (Cursor, VS
+                    Code themes), or courses.</li>
+                <li><strong>Sponsorships:</strong> Dev tools will pay to be featured in your articles.</li>
+                <li><strong>Digital Products:</strong> Sell your own E-book like "The Senior React Handbook."</li>
+            </ol>
+
+            <h2 id="roadmap">4. The "Zero to $1k/mo" Roadmap</h2>
+            <p>If I had to start from scratch today, this is exactly what I would do:</p>
+            <ul>
+                <li><strong>Month 1:</strong> Build 3 high-quality, free UI components. Release them on Twitter/Reddit
+                    to build an audience.</li>
+                <li><strong>Month 2:</strong> Package 20 components into a "Pro UI Kit" and launch on Gumroad for $29.
+                </li>
+                <li><strong>Month 3:</strong> Write 4 technical articles solving specific bugs related to your tech
+                    stack. SEO takes time to kick in.</li>
+                <li><strong>Month 4:</strong> Launch a tiny Micro-SaaS tool (like an image optimizer) that drives
+                    traffic to your UI Kit.</li>
+            </ul>
+
+            <div class="callout danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="callout-content">
+                    <h4>The Trap</h4>
+                    <p>Passive income is not "no work." It is "front-loaded work." You work hard once, and get paid
+                        repeatedly. Be prepared for 3-6 months of building before seeing real revenue.</p>
+                </div>
+            </div>
+
+            <h2>Conclusion</h2>
+            <p>You have the skills to build things that people pay for. The only thing stopping you is the mindset that
+                you need "permission" or a "job." Pick one of these paths—Templates, Micro-SaaS, or Content—and start
+                building your asset column today.</p>
+
         </article>
 
-        <div class="related-section">
-            <h3 class="related-title">Read Next</h3>
-            <div class="related-grid">
-                <a href="blog-freelancing.html" class="related-card">
-                    <span class="related-tag">#Money</span>
-                    <h3>Freelancing Guide</h3>
-                    <p>First ₹50k on Upwork.</p>
-                </a>
-                <a href="blog-ai-future.html" class="related-card">
-                    <span class="related-tag">#Future</span>
-                    <h3>Will AI Replace Us?</h3>
-                    <p>Developer career prediction.</p>
-                </a>
-            </div>
+        <div class="related-grid">
+            <a href="blog-freelance-roadmap.html" class="related-card">
+                <h3>Freelancing Guide</h3>
+                <p>How to make quick active income while building passive assets.</p>
+            </a>
+            <a href="blog-ai-replace-developers.html" class="related-card">
+                <h3>Future of Coding</h3>
+                <p>Will AI kill the passive income opportunity?</p>
+            </a>
         </div>
-        <footer>&copy; 2025 Code Formats by Udit Sharma.</footer>
+
+        <footer>
+            &copy; 2025 Code Formats. Built by Udit Sharma.
+        </footer>
     </div>
+
+    <div class="sticky-cta">
+        <div class="sticky-text">
+            Building a product? <span>Start with clean code.</span>
+        </div>
+        <a href="https://codeformats.com" class="cta-btn-primary">
+            Use Code Formatter <i class="fas fa-bolt"></i>
+        </a>
+    </div>
+
+    <script>
+        // Progress Bar Logic
+        window.onscroll = function () {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+    </script>
 </body>
 
 </html>

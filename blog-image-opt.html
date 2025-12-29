@@ -4,266 +4,769 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebP vs PNG: Optimizing Images for Core Web Vitals</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap">
+
+    <title>WebP vs PNG vs AVIF: The Ultimate Image Optimization Guide (2025)</title>
+    <meta name="description"
+        content="A deep dive into next-gen image formats. Learn how to reduce LCP by 70% using WebP, AVIF, and the HTML Picture tag fallback strategy.">
+    <meta name="keywords"
+        content="webp vs png, avif vs webp, optimize images for web, core web vitals lcp, next.js image component, html picture tag, image compression algorithms, technical seo">
+    <meta name="author" content="Udit Sharma">
+    <link rel="canonical" href="https://codeformats.com/blog-webp-optimization">
+
+    <meta property="og:title" content="WebP vs PNG vs AVIF: Stop Killing Your LCP Score">
+    <meta property="og:description" content="How to reduce image size by 90% without losing quality.">
+    <meta property="og:type" content="article">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-body: #050505;
-            --bg-glass: rgba(20, 20, 23, 0.6);
-            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-body: #09090b;
+            --bg-card: rgba(24, 24, 27, 0.6);
+            --bg-code: #121214;
             --border: #27272a;
-            --primary: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --border-highlight: #3f3f46;
+
+            --primary: #818cf8;
+            --primary-glow: rgba(129, 140, 248, 0.15);
+            --secondary: #10b981;
+            --danger: #f87171;
+            --warning: #fbbf24;
+
             --text-main: #e4e4e7;
             --text-muted: #a1a1aa;
-            --font-ui: 'Inter';
-            --font-code: 'JetBrains Mono';
+            --text-dim: #71717a;
+
+            --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        /* --- GLOBAL RESET & LAYOUT --- */
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-body);
-            background-image: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.08), transparent 40%);
+            background-color: var(--bg-body);
+            /* Technical Grid Background */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+
             color: var(--text-main);
             font-family: var(--font-ui);
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
+        /* SCROLL PROGRESS BAR */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--primary);
+            width: 0%;
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* MAIN WRAPPER */
         .wrapper {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px 120px 20px;
+            position: relative;
         }
 
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 15px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        .nav-back:hover {
-            color: #fff;
-            transform: translateX(-2px);
-        }
-
-        article h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 8px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .meta-info {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-bottom: 25px;
+        /* --- NAVIGATION --- */
+        .nav-header {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
             border-bottom: 1px solid var(--border);
             padding-bottom: 15px;
         }
 
-        .meta-info i {
+        .nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: #fff;
+        }
+
+        .brand-logo {
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        article h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin: 0 0 15px 0;
+            background: linear-gradient(180deg, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-family: var(--font-code);
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .meta-row span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-row i {
             color: var(--primary);
-            font-size: 0.75rem;
         }
 
         article p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #d4d4d8;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         article h2 {
-            font-size: 1.4rem;
-            margin-top: 30px;
-            margin-bottom: 10px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #fff;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        article h2::before {
+            content: '#';
+            color: var(--primary);
+            opacity: 0.4;
+            margin-right: 8px;
+        }
+
+        article h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+
+        strong {
             color: #fff;
             font-weight: 700;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 24px;
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* --- COMPONENTS --- */
+
+        /* TOC */
+        .toc {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 50px;
+            font-size: 0.9rem;
+        }
+
+        .toc summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toc summary:hover {
+            color: #fff;
+        }
+
+        .toc ul {
+            margin: 15px 0 0 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 8px;
+        }
+
+        .toc a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+            display: block;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        /* IDE CODE BLOCKS */
+        .code-wrapper {
+            position: relative;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-code);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 15px;
+            background: #18181b;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: var(--font-ui);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
 
         code {
             font-family: var(--font-code);
-            color: #a5d6ff;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-size: 0.85rem;
+            color: #a5b4fc;
         }
 
-        .cta-box {
-            background: rgba(99, 102, 241, 0.05);
-            border: 1px dashed var(--border);
-            border-left: 3px solid var(--primary);
-            padding: 20px;
+        .token-tag {
+            color: #f87171;
+        }
+
+        .token-attr {
+            color: #67e8f9;
+        }
+
+        .token-val {
+            color: #fca5a5;
+        }
+
+        .token-comment {
+            color: #52525b;
+            font-style: italic;
+        }
+
+        /* CALLOUTS */
+        .callout {
+            background: rgba(129, 140, 248, 0.05);
+            border: 1px solid rgba(129, 140, 248, 0.2);
             border-radius: 8px;
+            padding: 20px;
             margin: 30px 0;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            align-items: flex-start;
         }
 
-        .cta-box h3 {
-            margin: 0;
-            font-size: 1.1rem;
+        .callout i {
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .callout h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
             color: #fff;
         }
 
-        .cta-box p {
+        .callout p {
             margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .callout.danger {
+            background: rgba(248, 113, 113, 0.05);
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+
+        .callout.danger i {
+            color: var(--danger);
+        }
+
+        /* --- CTAs --- */
+        .sticky-cta {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-highlight);
+            padding: 10px 10px 10px 25px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2s backwards;
+        }
+
+        .sticky-text {
             font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
         }
 
-        .cta-btn {
-            align-self: start;
-            background: var(--primary);
+        .sticky-text span {
+            color: var(--text-dim);
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, var(--primary), #6366f1);
             color: #fff;
-            padding: 8px 20px;
-            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 50px;
             font-size: 0.85rem;
-            transition: 0.2s;
-            margin-top: 5px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: transform 0.2s;
+            white-space: nowrap;
         }
 
-        .cta-btn:hover {
-            background: #4f46e5;
+        .cta-btn-primary:hover {
+            transform: scale(1.05);
         }
 
-        .related-section {
-            margin-top: 50px;
-            border-top: 1px solid var(--border);
-            padding-top: 30px;
+        /* INLINE TOOL CARD */
+        .tool-card {
+            background: linear-gradient(180deg, rgba(39, 39, 42, 0.4) 0%, rgba(24, 24, 27, 0.4) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .related-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.25;
+            z-index: -1;
+        }
+
+        .tool-card h3 {
+            margin: 0 0 15px 0;
             color: #fff;
+            font-size: 1.4rem;
         }
 
+        .tool-card p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translate(-50%, 100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* --- RELATED SECTION --- */
         .related-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
         }
 
         .related-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 25px;
             text-decoration: none;
-            transition: 0.2s;
-            display: block;
+            transition: all 0.2s;
         }
 
         .related-card:hover {
             border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .related-tag {
-            font-size: 0.65rem;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 5px;
-            display: block;
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .related-card h3 {
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
             color: #fff;
-            margin: 0 0 5px 0;
-            line-height: 1.4;
         }
 
         .related-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: var(--text-dim);
             margin: 0;
-            line-height: 1.4;
         }
 
+        /* --- FOOTER --- */
         footer {
-            margin-top: 40px;
+            margin-top: 80px;
             text-align: center;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--text-dim);
             border-top: 1px solid var(--border);
-            padding-top: 20px;
-            font-size: 0.8rem;
+            padding: 40px 0;
         }
 
         @media(max-width: 600px) {
+            .wrapper {
+                padding: 20px 15px 100px 15px;
+            }
+
+            article h1 {
+                font-size: 2rem;
+            }
+
             .related-grid {
                 grid-template-columns: 1fr;
             }
 
-            article h1 {
-                font-size: 1.6rem;
+            .sticky-text {
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <div class="wrapper">
-        <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+        <nav class="nav-header">
+            <a href="blog.html" class="nav-back"><i class="fas fa-arrow-left"></i> All Articles</a>
+            <div class="brand-logo">Code Formats</div>
+        </nav>
+
         <article>
-            <h1>WebP vs PNG: Optimizing Images for Core Web Vitals</h1>
-            <div class="meta-info">
-                <span><i class="far fa-user"></i> Udit Sharma</span>
-                <span><i class="far fa-clock"></i> 3 Min Read</span>
+            <h1>WebP vs PNG vs AVIF: The Ultimate Image Optimization Guide (2025)</h1>
+
+            <div class="meta-row">
+                <span><i class="far fa-user-circle"></i> Udit Sharma</span>
+                <span><i class="far fa-calendar-alt"></i> Jan 29, 2025</span>
+                <span><i class="far fa-clock"></i> 14 Min Read</span>
             </div>
 
-            <p>I audited a client's website recently. Their homepage was 4MB. 3.5MB of that was just images. This is an
-                SEO killer. Google's Core Web Vitals penalize slow loading sites heavily.</p>
+            <details class="toc" open>
+                <summary>Table of Contents</summary>
+                <ul>
+                    <li><a href="#intro">The 4MB Homepage Disaster</a></li>
+                    <li><a href="#formats">1. Format Showdown: PNG vs WebP vs AVIF</a></li>
+                    <li><a href="#lossless">2. Lossless vs Lossy Compression</a></li>
+                    <li><a href="#html">3. The Picture Tag (Fallback Strategy)</a></li>
+                    <li><a href="#nextjs">4. Next.js Image Optimization</a></li>
+                    <li><a href="#tools">5. Tools & CLI Automation</a></li>
+                    <li><a href="#faq">6. Frequently Asked Questions</a></li>
+                </ul>
+            </details>
 
-            <h2>Why PNG is destroying your speed</h2>
-            <p>PNG is great for transparency, but it's a lossless format from the 90s. It keeps too much data that the
-                human eye can't even see. A typical hero banner in PNG can easily be 1MB+.</p>
+            <p id="intro">I recently audited a client's e-commerce website. Their homepage load time was 4.2 seconds.
+                The culprit? A single 3.5MB PNG hero banner. This is an SEO death sentence.</p>
 
-            <h2>Enter WebP (Google's Format)</h2>
-            <p>WebP provides superior compression. I have seen 500KB PNGs turn into 40KB WebP images with <strong>zero
-                    visible loss</strong> in quality. That is a 90% reduction.</p>
+            <p>Google's Core Web Vitals heavily penalize slow LCP (Largest Contentful Paint). If your image takes 3
+                seconds to load, your user has already bounced. In 2025, using raw PNGs for photographs is technical
+                negligence.</p>
 
-            <h2>How to Implement?</h2>
-            <p>You don't need manual tools. Use the <code>&lt;picture&gt;</code> tag to serve WebP to modern browsers
-                and PNG to older ones as a fallback.</p>
+            <p>This guide will teach you the engineering approach to image optimization, moving beyond simple
+                "compression" to modern format selection and intelligent serving strategies.</p>
+
+            <h2 id="formats">1. Format Showdown: PNG vs WebP vs AVIF</h2>
+            <p>Not all formats are created equal. Here is the technical breakdown of when to use what.</p>
+
+            <div class="code-wrapper">
+                <div class="code-header">Benchmark: 1920x1080 Photograph</div>
+                <pre><code><span class="token-comment"># Original</span>
+hero.png .......... 2.4 MB   <span class="token-val">(Legacy)</span>
+
+<span class="token-comment"># Optimized</span>
+hero.jpg .......... 450 KB   <span class="token-val">(Standard)</span>
+hero.webp ......... 120 KB   <span class="token-val">(Google's Standard)</span>
+hero.avif ......... 85 KB    <span class="token-val">(Next-Gen / The Winner)</span></code></pre>
+            </div>
+
+            <h3>The Verdict</h3>
+            <ul>
+                <li><strong>PNG:</strong> Only use for icons, logos, or graphics requiring transparency with sharp
+                    edges. Never for photos.</li>
+                <li><strong>JPG:</strong> Good fallback, but outdated.</li>
+                <li><strong>WebP:</strong> The current standard. Supported by 97% of browsers. 30% smaller than JPG.
+                </li>
+                <li><strong>AVIF:</strong> The future. Superior compression to WebP, but slightly lower browser support
+                    (93%).</li>
+            </ul>
+
+            <h2 id="lossless">2. Lossless vs Lossy Compression</h2>
+            <p>Developers often fear "Lossy" compression because they think it ruins quality. In reality, the human eye
+                cannot distinguish between 100% quality and 85% quality.</p>
+
+            <p><strong>The Sweet Spot:</strong> When converting images to WebP, set the quality to
+                <strong>80-85%</strong>. This often reduces file size by 50% with zero visible artifacts.</p>
+
+            <div class="tool-card">
+                <h3>⚡ Convert Images Instantly</h3>
+                <p>Stop uploading heavy PNGs. Use our free tool to convert images to WebP/AVIF with the perfect
+                    compression settings.</p>
+                <a href="https://codeformats.com" class="cta-btn-primary" style="display:inline-block;">
+                    Open Image Converter
+                </a>
+            </div>
+
+            <h2 id="html">3. The Picture Tag (Fallback Strategy)</h2>
+            <p>You cannot just replace all `.png` files with `.avif` because older browsers (like old Safari versions)
+                will show a broken image icon. This is where the HTML5 <code>&lt;picture&gt;</code> tag comes in.</p>
+
+            <p>This relies on <strong>"Art Direction"</strong> logic: The browser parses the sources from top to bottom
+                and downloads the <em>first one it supports</em>. It ignores the rest.</p>
+
+            <div class="code-wrapper">
+                <div class="code-header">index.html</div>
+                <pre><code><span class="token-tag">&lt;picture&gt;</span>
+  <span class="token-comment">&lt;!-- 1. Try AVIF (Best) --&gt;</span>
+  <span class="token-tag">&lt;source</span> <span class="token-attr">srcset</span>=<span class="token-val">"img/hero.avif"</span> <span class="token-attr">type</span>=<span class="token-val">"image/avif"</span><span class="token-tag">&gt;</span>
+  
+  <span class="token-comment">&lt;!-- 2. Try WebP (Great) --&gt;</span>
+  <span class="token-tag">&lt;source</span> <span class="token-attr">srcset</span>=<span class="token-val">"img/hero.webp"</span> <span class="token-attr">type</span>=<span class="token-val">"image/webp"</span><span class="token-tag">&gt;</span>
+  
+  <span class="token-comment">&lt;!-- 3. Fallback to JPG (Safe) --&gt;</span>
+  <span class="token-tag">&lt;img</span> 
+    <span class="token-attr">src</span>=<span class="token-val">"img/hero.jpg"</span> 
+    <span class="token-attr">alt</span>=<span class="token-val">"Description"</span>
+    <span class="token-attr">loading</span>=<span class="token-val">"lazy"</span>
+    <span class="token-attr">width</span>=<span class="token-val">"800"</span> 
+    <span class="token-attr">height</span>=<span class="token-val">"600"</span>
+  <span class="token-tag">&gt;</span>
+<span class="token-tag">&lt;/picture&gt;</span></code></pre>
+            </div>
+
+            <h2 id="nextjs">4. Next.js Image Optimization</h2>
+            <p>If you use React/Next.js, never use the <code>&lt;img&gt;</code> tag. Use the <code>next/image</code>
+                component. It automates everything we just discussed.</p>
+
+            <div class="callout">
+                <i class="fas fa-bolt"></i>
+                <div class="callout-content">
+                    <h4>Next.js Magic</h4>
+                    <p>The `&lt;Image /&gt;` component automatically generates WebP/AVIF variants, lazy loads images,
+                        and prevents Layout Shift (CLS) by reserving space.</p>
+                </div>
+            </div>
+
+            <div class="code-wrapper">
+                <div class="code-header">components/Hero.jsx</div>
+                <pre><code><span class="token-tag">import</span> Image <span class="token-tag">from</span> <span class="token-val">'next/image'</span>
+<span class="token-tag">import</span> heroPic <span class="token-tag">from</span> <span class="token-val">'../public/hero.png'</span>
+
+<span class="token-tag">export default function</span> Hero() {
+  <span class="token-tag">return</span> (
+    <span class="token-tag">&lt;Image</span>
+      <span class="token-attr">src</span>={heroPic}
+      <span class="token-attr">alt</span>=<span class="token-val">"Hero"</span>
+      <span class="token-attr">placeholder</span>=<span class="token-val">"blur"</span> <span class="token-comment">// Blurry preview while loading</span>
+      <span class="token-attr">priority</span> <span class="token-comment">// Preload this image (LCP boost)</span>
+    <span class="token-tag">/&gt;</span>
+  )
+}</code></pre>
+            </div>
+
+            <h2 id="tools">5. Tools & CLI Automation</h2>
+            <p>Do not manually convert images one by one. Use CLI tools to batch process your entire `assets` folder.
+            </p>
+
+            <ul>
+                <li><strong>Squoosh.app:</strong> Best for single images (visual comparison).</li>
+                <li><strong>cwebp (CLI):</strong> Google's official WebP converter.</li>
+                <li><strong>Sharp (Node.js):</strong> Excellent library for programmatic conversion in build scripts.
+                </li>
+            </ul>
+
+            <div class="code-wrapper">
+                <div class="code-header">Terminal</div>
+                <pre><code><span class="token-comment"># Install WebP tools (Mac)</span>
+brew install webp
+
+<span class="token-comment"># Convert PNG to WebP (Quality 80)</span>
+cwebp -q 80 image.png -o image.webp</code></pre>
+            </div>
+
+            <div id="faq" style="margin-top: 60px; border-top: 1px solid var(--border); padding-top: 40px;">
+                <h2 style="margin-top: 0;">Frequently Asked Questions</h2>
+
+                <details
+                    style="margin-bottom: 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                    <summary
+                        style="padding: 15px 20px; cursor: pointer; font-weight: 600; color: #fff; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        Does converting PNG to WebP reduce quality?
+                        <span style="color: var(--primary); font-size: 1.2rem;">+</span>
+                    </summary>
+                    <div
+                        style="padding: 0 20px 20px 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        If you use lossless compression, quality remains 100% identical. With lossy compression
+                        (recommended), the human eye usually cannot detect differences at 80-85% quality settings, while
+                        file size drops significantly.
+                    </div>
+                </details>
+
+                <details
+                    style="margin-bottom: 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                    <summary
+                        style="padding: 15px 20px; cursor: pointer; font-weight: 600; color: #fff; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        Is AVIF supported on all browsers?
+                        <span style="color: var(--primary); font-size: 1.2rem;">+</span>
+                    </summary>
+                    <div
+                        style="padding: 0 20px 20px 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        AVIF is supported by Chrome, Firefox, and Safari (iOS 16+). It covers about 93% of global users.
+                        However, you should always use the <code>&lt;picture&gt;</code> tag with a fallback to JPG/PNG
+                        for older browsers like Internet Explorer.
+                    </div>
+                </details>
+
+                <details
+                    style="margin-bottom: 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                    <summary
+                        style="padding: 15px 20px; cursor: pointer; font-weight: 600; color: #fff; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        Should I use WebP for logos?
+                        <span style="color: var(--primary); font-size: 1.2rem;">+</span>
+                    </summary>
+                    <div
+                        style="padding: 0 20px 20px 20px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        No. For logos and icons, <strong>SVG</strong> is the best format. SVGs are vector-based, meaning
+                        they scale infinitely without pixelation and are usually smaller in file size than even WebP for
+                        simple graphics.
+                    </div>
+                </details>
+            </div>
+
+            <h2>Conclusion</h2>
+            <p>Image optimization is low-hanging fruit. By simply converting your library to WebP/AVIF and using the
+                <code>&lt;picture&gt;</code> tag, you can reduce your page size by megabytes. Faster sites rank higher
+                and convert better. Stop serving PNGs.</p>
+
         </article>
 
-        <div class="related-section">
-            <h3 class="related-title">Read Next</h3>
-            <div class="related-grid">
-                <a href="blog-css-seo.html" class="related-card">
-                    <span class="related-tag">#SEO</span>
-                    <h3>Minifying CSS for SEO</h3>
-                    <p>Boost LCP scores.</p>
-                </a>
-                <a href="blog-technical-seo.html" class="related-card">
-                    <span class="related-tag">#Tech</span>
-                    <h3>React Technical SEO</h3>
-                    <p>Fix indexing issues.</p>
-                </a>
-            </div>
+        <div class="related-grid">
+            <a href="blog-html5-boilerplate.html" class="related-card">
+                <h3>HTML5 Boilerplate</h3>
+                <p>The perfect starting point for SEO.</p>
+            </a>
+            <a href="blog-css-minification-seo.html" class="related-card">
+                <h3>Minification Guide</h3>
+                <p>How CSS size impacts rankings.</p>
+            </a>
         </div>
-        <footer>&copy; 2025 Code Formats by Udit Sharma.</footer>
+
+        <footer>
+            &copy; 2025 Code Formats. Built by Udit Sharma.
+        </footer>
     </div>
+
+    <div class="sticky-cta">
+        <div class="sticky-text">
+            Heavy images? <span>Compress them now.</span>
+        </div>
+        <a href="https://codeformats.com" class="cta-btn-primary">
+            Use Image Compressor <i class="fas fa-bolt"></i>
+        </a>
+    </div>
+
+    <script>
+        // Progress Bar Logic
+        window.onscroll = function () {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+    </script>
 </body>
 
 </html>
